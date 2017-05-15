@@ -1,0 +1,24 @@
+# depslib dependency file v1.0
+1494854732 source:e:\utc\lo21\projet\date.cpp
+	<iomanip>
+	"date.h"
+	<ctime>
+
+1494854662 e:\utc\lo21\projet\date.h
+	<iostream>
+	<string>
+	<iomanip>
+
+1494854548 source:e:\utc\lo21\projet\main.cpp
+	<iostream>
+	<string>
+	"note.h"
+
+1494856968 e:\utc\lo21\projet\note.h
+	<iostream>
+	<string>
+	"date.h"
+
+1494854562 source:e:\utc\lo21\projet\note.cpp
+	"note.h"
+
