@@ -28,8 +28,12 @@ class Article : public Note {
 private :
     std::string texte;
 public:
-    Article (unsigned int id, std:: string t, TIME::Date dc, TIME::Date ddm, std::string te) : Note(id,t,dc,ddm), texte(te) {}
-    std::string getTexte() const {return texte;}
+
+    //MODIFICATION
+    //ici aussi il faut ajouter les attributs active et corbeille puisque Article hérite de Note et car le constructeur de Note utilise ces attributs
+    Article (unsigned int id, std:: string t, TIME::Date dc, TIME::Date ddm, bool active=false, bool corbeille=false, std::string te) : Note(id,t,dc,ddm,active,corbeille), texte(te) {}
+    std::string getTexte() {return texte;}
+
 };
 
 class Tache : public Note {
@@ -39,12 +43,12 @@ private :
     TIME::Date echeance;
     Statut etat;
 public:
-    Tache (unsigned int id, std:: string t, TIME::Date dc, TIME::Date ddm, std::string a,unsigned int p, TIME::Date e, Statut s) : Note(id,t,dc,ddm), action (a), priorite(p), echeance(e), etat(s) {}
-    std::string getAction() const {return action;}
-    unsigned int getPriorite() const {return priorite;}
-    TIME::Date getEcheance() const {return echeance;}
-    Statut getStatut() const {return etat;}
 
+    Tache (unsigned int id, std:: string t, TIME::Date dc, TIME::Date ddm, bool active=false, bool corbeille=false std::string a,unsigned int p, TIME::Date e, Statut s) : Note(id,t,dc,ddm,active,corbeille), action (a), priorite(p), echeance(e), etat(s) {}
+    std::string getAction()  {return action;}
+    unsigned int getPriorite() {return priorite;}
+    TIME::Date getEcheance() {return echeance;}
+    Statut getStatut() {return etat;}
 };
 
 
