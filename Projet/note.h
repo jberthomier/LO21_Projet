@@ -17,7 +17,7 @@ private:
     bool active;
     bool corbeille;
 public :
-    Note (unsigned int id, std:: string t, TIME::Date dc, TIME::Date ddm,bool active=false,bool corbeille=false) : identificateur(id),titre(t), dateCreation(dc), dateDerniereModif(ddm),active(false),corbeille(false) {}
+    virtual Note (unsigned int id, std:: string t, TIME::Date dc, TIME::Date ddm,bool active=false,bool corbeille=false) : identificateur(id),titre(t), dateCreation(dc), dateDerniereModif(ddm),active(false),corbeille(false) {}
     ~Note();
     unsigned int getId() const {return identificateur;}
     std::string getTitre() const {return titre;}
