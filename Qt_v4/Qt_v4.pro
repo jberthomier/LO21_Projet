@@ -6,8 +6,12 @@ QT += xml
 SOURCES += \
     date.cpp \
     main.cpp \
-    note.cpp
+    note.cpp \
+    couple.cpp \
+    relation.cpp
 
 HEADERS += \
     date.h \
-    note.h
+    note.h \
+    couple.h \
+    relation.h
