@@ -1,234 +1,95 @@
 #include "note.h"
 
-//méthodes privés class couplemanager
+using namespace std;
 
-CoupleManager* CoupleManager::instance=0;
+/*------------------------------------------------------Méthodes de la classe Note-------------------------------------------------------*/
 
-CoupleManager::CoupleManager():couples(nullptr), nbCouples(0), nbMaxCouples(0) {}
-
-CoupleManager::~CoupleManager(){
-    for (unsigned int i=0; i<nbCouples; i++){
-        delete couples[i];
+Note& Note::operator=(Note const& note) {
+    if (this != &note) {
+        identificateur = note.identificateur;
+        titre = note.titre;
+        dateCreation = note.dateCreation;
+        dateDerniereModif = note.dateDerniereModif;
+        active = note.active;
+        corbeille = note.corbeille;
     }
-    delete[] couples;
+    return *this;
 }
 
-void CoupleManager::addCouple(Couple* c){
-    for (unsigned int i=0; i<nbCouples; i++){
-        if (couples[i]->getLabel()==c->getLabel()){
-            throw NotesException("Erreur: la relation existe déjà.");
-        }
-    }
-    if (nbCouples==nbMaxCouples){
-        Couple** newCouples=new Couple*[nbMaxCouples+10];
-        for (unsigned int i=0; i<nbCouples; i++){
-            newCouples[i]=couples[i];
-        }
-        Couple** oldCouples=couples;
-        couples=newCouples;
-        nbMaxCouples+=10;
-        if (oldCouples){
-            delete[] oldCouples;
-        }
-    }
-    couples[nbCouples]=c;
-    nbCouples++;
+/*------------------------------------------------------Méthodes des classes filles-------------------------------------------------------*/
+
+Article* Article::edit(){
+    Article* newArticle = new Article(*this);
+    this->archiver();
+    TIME::Date d;
+    newArticle->setDdm(d);
+    QString t;
+    qtout<< "Entrez le nouveau texte : " << endl;
+    qtin>> t;
+    newArticle->setText(t);
+    return newArticle;
 }
 
-Couple& CoupleManager::getNewCouple(const QString& t, const Note& ns, const Note& nd){
-    Couple* c=new Couple(t, ns, nd);
-    addCouple(c);
-    return *c;
-}
+Tache* Tache::edit() {
+    QString a;
+    unsigned int p, day, month, year;
+    TIME::Date d_echeance(day,month,year);
+    TIME::Date d; //date actuelle
+    int e;
 
-void CoupleManager::deleteCouple(Couple& c){
-    for (unsigned int i=0; i<nbCouples; i++){
-        if (couples[i]==&c){
-            for (unsigned int j=i; j<nbCouples; j++){
-                couples[j]=couples[j+1];
-            }
-            nbCouples--;
-            delete &c;
-        }
+    Tache* newTask = new Tache(*this);
+    this->archiver();
+    newTask->setDdm(d);
+
+    qtout<< "Entrez l'action de la tache : " << endl;
+    qtin>> a;
+    newTask->setAction(a);
+    qtout<< "Entrez la priorite de la tache : " << endl;
+    qtin>> p;
+    newTask->setPriorite(p);
+
+    qtout<< "Entrez le jour d'echeance de la tache : " << endl;
+    qtin>> day;
+    qtout<< "Entrez le mois d'echeance de la tache : " << endl;
+    qtin>> month;
+    qtout<< "Entrez l'annee d'echeance de la tache : " << endl;
+    qtin>> year;
+    d_echeance.setDate(day, month, year);
+    newTask->setEcheance(d_echeance);
+
+    qtout<< "Entrez le statut de la tache : " << endl;
+    qtin>> e;
+    switch (e) {
+    case 0:
+        newTask->setEtat(En_attente);
+        break;
+    case 1:
+        newTask->setEtat(En_cours);
+        break;
+    case 2:
+        newTask->setEtat(Terminee);
+        break;
+    default:
+        qtout<< "Statut inconnu." << endl;
     }
+    return newTask;
 }
 
-//méthodes publics class couplemanager
-
-CoupleManager& CoupleManager::getInstance(){
-    if (instance==nullptr) {
-        instance= new CoupleManager();
-    }
-    return *instance;
+Media* Media::edit(){
+    return this;
 }
 
-void CoupleManager::freeInstance(){
-    if (instance!=nullptr) {delete instance;}
-    else {instance=nullptr;}
+void Article::print(QTextStream& f) const {
+    f<< "Article : " << getTitre() << "\n" << "texte:\n" << getTexte() << "\n";
 }
 
-Couple& CoupleManager::getCouple(const QString& l){
-    for (unsigned int i=0; i<nbCouples; i++){
-        if (couples[i]->getLabel()==l){
-            return *couples[i];
-        }
-    }
-    throw NotesException("Erreur: il n'existe pas de relation avec ce titre.");
+void Tache::print(QTextStream& f) const {
+    f<< "Tache : " << getTitre() << "\n" << "Action :\n" << getAction() << "\n" << "Priorite :\n" << getPriorite() << "\n" << "Statut :\n" << getStatut() << "\n";
+    f<< "Echeance :\n";
+    TIME::Date d = getEcheance();
+    d.afficher(f);
 }
 
-Couple& CoupleManager::getCouple(const Note &ns, const Note &nd){
-    for (unsigned int i=0; i<nbCouples; i++){
-        if (couples[i]->getNoteSource().getTitre()==ns.getTitre() && couples[i]->getNoteDestination().getTitre()==nd.getTitre()){
-            return *couples[i];
-        }
-    }
-    throw NotesException("Erreur: il n'existe pas de relation entre ces deux notes.");
-}
-
-void CoupleManager::afficherAscendants(const Note& n, QDebug f){
-    f<<"Ascendants: ";
-    for (unsigned int i=0; i<nbCouples; i++){
-        if (couples[i]->getNoteDestination().getTitre()==n.getTitre()){
-            f<<couples[i]->getNoteSource().getTitre();
-        }
-    }
-}
-
-void CoupleManager::afficherDescendants(const Note& n, QDebug f){
-    f<<"Descendants: ";
-    for (unsigned int i=0; i<nbCouples; i++){
-        if (couples[i]->getNoteSource().getTitre()==n.getTitre()){
-            f<<couples[i]->getNoteDestination().getTitre();
-        }
-    }
-}
-
-void CoupleManager::arborescence(const Note& n, QDebug f){
-    afficherAscendants(n,f );
-    afficherDescendants(n, f);
-}
-
-//méthodes classe relation
-
-Relation::~Relation(){
-    for (unsigned int i=0; i<nbCouples; i++){
-        delete couples[i];
-    }
-    delete[] couples;
-}
-
-void Relation::addCouple(const Note& ns, const Note& nd){
-    for (unsigned int i=0; i<nbCouples; i++){
-        if (couples[i]->getNoteSource().getTitre()==ns.getTitre() && couples[i]->getNoteDestination().getTitre()==nd.getTitre()){
-            throw NotesException("Erreur: la relation entre ces deux notes existe déjà existe déjà.");
-        }
-    }
-    if (nbCouples==nbMaxCouples){
-        Couple** newCouples=new Couple*[nbMaxCouples+10];
-        for (unsigned int i=0; i<nbCouples; i++){
-            newCouples[i]=couples[i];
-        }
-        Couple** oldCouples=couples;
-        couples=newCouples;
-        nbMaxCouples+=10;
-        if (oldCouples){
-            delete[] oldCouples;
-        }
-    }
-    bool res=false;
-    for (unsigned int i=0; i<CoupleManager::instance->getNbCouples(); i++){
-        if (CoupleManager::instance->couples[i]==&CoupleManager::instance->getCouple(ns,nd)){ //il existe déjà un couple entre ces deux notes
-            res=true;
-        }
-    }
-    if (res) couples[nbCouples]=&CoupleManager::instance->getCouple(ns,nd);
-    else couples[nbCouples]=&CoupleManager::instance->getNewCouple("", ns, nd);
-    nbCouples++;
-}
-
-void Relation::removeCouple(Couple& c){
-    for (unsigned int i=0; i<nbCouples; i++){
-        if (couples[i]==&c){
-            for (unsigned int j=i; j<nbCouples; j++){
-                couples[j]=couples[j+1];
-            }
-            nbCouples--;
-        }
-    }
-}
-
-//méthodes privé classe relationmanager
-
-RelationManager* RelationManager::instance=0;
-
-RelationManager::RelationManager():relations(0), nbRelations(0), nbMaxRelations(){}
-
-RelationManager::~RelationManager(){
-    for (unsigned int i=0; i<nbRelations; i++){
-        delete relations[i];
-    }
-    delete[] relations;
-}
-
-void RelationManager::addRelation (Relation* r){
-    for (unsigned int i=0; i<nbRelations; i++){
-        if (relations[i]->getTitre()==r->getTitre()){
-            throw NotesException("Erreur: la relation existe déjà.");
-        }
-    }
-    if (nbRelations==nbMaxRelations){
-        Relation** newRelations=new Relation*[nbMaxRelations+10];
-        for (unsigned int i=0; i<nbRelations; i++){
-            newRelations[i]=relations[i];
-        }
-        Relation** oldRelations=relations;
-        relations=newRelations;
-        nbMaxRelations+=10;
-        if (oldRelations){
-            delete[] oldRelations;
-        }
-    }
-    relations[nbRelations]=r;
-    nbRelations++;
-}
-
-//méthodes publics classe relationmanager
-
-RelationManager& RelationManager::getInstance(){
-    if (instance==nullptr) {
-        instance= new RelationManager();
-    }
-    return *instance;
-}
-
-void RelationManager::freeInstance(){
-    if (instance!=nullptr) {delete instance;}
-    else {instance=nullptr;}
-}
-
-void RelationManager::deleteRelation(Relation& r){
-    for (unsigned int i=0; i<nbRelations; i++){
-        if (relations[i]==&r){
-            for (unsigned int j=i; j<nbRelations; j++){
-                relations[j]=relations[j+1];
-            }
-            nbRelations--;
-            delete &r;
-        }
-    }
-}
-
-const Relation& RelationManager::getNewRelation(const QString& t){
-    Relation* r=new Relation(t,"");
-    addRelation(r);
-    return *r;
-}
-
-const Relation& RelationManager::getRelation(const QString& t){
-    for (unsigned int i=0; i<nbRelations; i++){
-        if (relations[i]->getTitre()==t){
-            return *relations[i];
-        }
-    }
-    throw NotesException("Erreur: il n'existe pas de relation avec ce titre.");
+void Media::print(QTextStream& f) const{
+    f<< "Media :" << getDescription() << "\n" << "Chemin: \n" << getChemin() << "\n" << "TypeMedia: \n" << getTypeMedia() <<  "\n";
 }

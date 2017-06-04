@@ -120,25 +120,25 @@ Couple& CoupleManager::getCouple(const Note &ns, const Note &nd)const{
     throw NotesException("Erreur: il n'existe pas de relation entre ces deux notes.");
 }
 
-void CoupleManager::afficherAscendants(const Note& n, QDebug f){
-    f<<"Ascendants: ";
+void CoupleManager::afficherAscendants(const Note& n){
+    qtout<<"Ascendants: ";
     for (unsigned int i=0; i<nbCouples; i++){
         if (couples[i]->getNoteDestination().getTitre()==n.getTitre()){
-            f<<couples[i]->getNoteSource().getTitre();
+            qtout<<couples[i]->getNoteSource().getTitre();
         }
     }
 }
 
-void CoupleManager::afficherDescendants(const Note& n, QDebug f){
-    f<<"Descendants: ";
+void CoupleManager::afficherDescendants(const Note& n){
+    qtout<<"Descendants: ";
     for (unsigned int i=0; i<nbCouples; i++){
         if (couples[i]->getNoteSource().getTitre()==n.getTitre()){
-            f<<couples[i]->getNoteDestination().getTitre();
+            qtout<<couples[i]->getNoteDestination().getTitre();
         }
     }
 }
 
-void CoupleManager::arborescence(const Note& n, QDebug f){
-    afficherAscendants(n,f);
-    afficherDescendants(n, f);
+void CoupleManager::arborescence(const Note& n){
+    afficherAscendants(n);
+    afficherDescendants(n);
 }

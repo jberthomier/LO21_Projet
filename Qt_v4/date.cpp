@@ -1,9 +1,15 @@
 #include "date.h"
-#include <ctime>
 
 using namespace TIME;
 
-QDebug operator<<(QDebug f, const Date& x){ x.afficher(f); return f;}
+QTextStream& operator<<(QTextStream& f,const Date& x){ x.afficher(f); return f;}
+
+Date::Date() { //date actuelle
+    std::time_t result = std::time(nullptr); // nombre de secondes depuis le 01/01/1970
+    struct std::tm dateActuelle;
+    dateActuelle = *localtime(&result);
+    setDate(dateActuelle.tm_yday, dateActuelle.tm_mon, dateActuelle.tm_year+1900);
+}
 
 void Date::setDate(unsigned short int j, unsigned short int m, unsigned int a){
     // initialisation de la date, renvoie vrai si la date est valide
@@ -16,7 +22,7 @@ void Date::setDate(unsigned short int j, unsigned short int m, unsigned int a){
     }
 }
 
-void Date::afficher(QDebug f) const{
+void Date::afficher(QTextStream& f) const{
     // affiche le date sous le format JJ/MM/AAAA
     f<<jour<<"/"<<mois<<"/"<<annee<<" "; //a completer pour avoir 03/05/1998 par exemple, complete avec des 0 si un seul chiffre pour le jour ou le mois
 }

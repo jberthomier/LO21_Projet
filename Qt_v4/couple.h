@@ -31,9 +31,9 @@ public:
     const QString getLabel() const {return label;}
     const Note& getNoteSource() const {return noteSource;}
     const Note& getNoteDestination() const {return noteDestination;}
-    void getRelations(QDebug f)const{ //récupérer toutes les relations mises en place pour un couple de notes
+    void getRelations()const{ //récupérer toutes les relations mises en place pour un couple de notes
         for (unsigned int i=0; i<nbRelations; i++){
-            f<<"Label: "<<relations[i]->getTitre();
+            qtout<<"Label: "<<relations[i]->getTitre();
         }
     }
 
@@ -76,9 +76,9 @@ public:
     Couple& getCouple(const Note &ns, const Note &nd) const;
 
     //visualisation
-    void arborescence(const Note& n, QDebug f); //visualiser l'arborescence des relations d'une note
-    void afficherAscendants(const Note& n, QDebug f);
-    void afficherDescendants(const Note& n, QDebug f);
+    void arborescence(const Note& n); //visualiser l'arborescence des relations d'une note
+    void afficherAscendants(const Note& n);
+    void afficherDescendants(const Note& n);
 
 };
 

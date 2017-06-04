@@ -2,7 +2,11 @@
 #define DATE_H
 
 #include <QString>
-#include <QDebug>
+#include <QTextStream>
+#include <ctime>
+
+QTextStream qtout(stdout);
+QTextStream qtin(stdin);
 
 namespace TIME {
 
@@ -24,13 +28,14 @@ class Date {
             \param m mois avec 1<=m<=12
             \param a année avec a>=0
             */
-        Date(unsigned int short j=1, unsigned int short m=1, unsigned int a=0):jour(1),mois(1),annee(0){ setDate(j,m,a); }
+        Date();
+        Date(unsigned int short j, unsigned int short m, unsigned int a):jour(1),mois(1),annee(0){ setDate(j,m,a); }
         // méthodes
         unsigned short int  getJour() const { return jour; } //<! Retourne le jour de la date
         unsigned short int  getMois() const { return mois; } //<! Retourne le mois de la date
         unsigned int getAnnee() const { return annee; } //<! Retourne l'année de la date
         void setDate(unsigned short int j, unsigned short int m, unsigned int a); //!< initialisation de la date
-        void afficher(QDebug f) const; //!< affiche le date sous le format JJ/MM/AAAA
+        void afficher(QTextStream& f=qtout) const; //!< affiche le date sous le format JJ/MM/AAAA
         bool operator==(const Date& d) const; //<! d1==d2 retourne vrai si les deux dates sont égales
         bool operator<(const Date& d) const; //<! Compare deux dates dans le temps : d1<d2 retourne true si d1 est avant d2
         int operator-(const Date& d) const; //<! Retourne le nombre de jours séparant les deux dates

@@ -9,11 +9,11 @@ Relation::~Relation(){
     delete[] couples;
 }
 
-void Relation::getCouples(QDebug f) const {
+void Relation::getCouples() const {
     for (unsigned int i=0; i<nbCouples; i++){
-        f<<"Label: "<<couples[i]->getLabel();
+        qtout<<"Label: "<<couples[i]->getLabel();
         if (orientation){
-            f<<"Note source: "<<couples[i]->getNoteSource().getTitre()<<" Note destination: "<<couples[i]->getNoteDestination().getTitre()<<"\n";
+            qtout<<"Note source: "<<couples[i]->getNoteSource().getTitre()<<" Note destination: "<<couples[i]->getNoteDestination().getTitre()<<"\n";
         }
     }
 }
@@ -139,9 +139,19 @@ const Relation& RelationManager::getRelation(const QString& t) const{
     throw NotesException("Erreur: il n'existe pas de relation avec ce titre.");
 }
 
-void RelationManager::visualiserRelation(const Relation& r, QDebug f)const{
-    f<<"Titre: "<<r.getTitre()<<"\nDescription: "<<r.getDescription()<<"\nCouples: ";
+void RelationManager::visualiserRelation(const Relation& r)const{
+    qtout<<"Titre: "<<r.getTitre()<<"\nDescription: "<<r.getDescription()<<"\nCouples: ";
     for (unsigned int i=0; i<r.getNbCouples(); i++){
-        r.getCouples(f);
+        r.getCouples();
     }
+}
+
+bool RelationManager::noteReference(const Note& n, const QString& t){
+    bool res=false;
+    for (unsigned int i=0; i<getRelation(t).getNbCouples(); i++){
+        if (getRelation(t).couples[i]->getNoteSource().getId()==n.getId() || getRelation(t).couples[i]->getNoteDestination().getId()==n.getId()){
+            res=true;
+        }
+    }
+    return res;
 }

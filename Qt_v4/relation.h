@@ -1,17 +1,19 @@
 #ifndef RELATION_H
 #define RELATION_H
 
+#include "relationmanager.h"
 class Couple;
 
 class Relation {
 
-protected:
+private:
     QString titre;
     QString description;
     Couple** couples;
     unsigned int nbCouples;
     unsigned int nbMaxCouples;
     bool orientation;
+    friend bool RelationManager::noteReference(const Note& n, const QString& t);
 
 public:
     //constructeur et destructeur
@@ -26,7 +28,7 @@ public:
         if (orientation) return "Relation orientee";
         else return "Relation non orientee";
     }
-    void getCouples(QDebug f) const; //récupérer tous les couples possédant une certaine relation
+    void getCouples() const; //récupérer tous les couples possédant une certaine relation
 
     //accesseurs en écriture
     void setTitre(const QString& t){titre=t;}
@@ -37,43 +39,6 @@ public:
     void addCouple(const Note &ns, const Note &nd); //pour créer une relation entre deux éléments (cf document explication)
     void removeCouple(Couple& c); //enlever un couple d'une relation (cf document explication)
 
-};
-
-class Reference : public Relation {
-private:
-public:
-    Reference(const QString& t, const QString& d): Relation(t, d){}
-};
-
-class RelationManager {
-
-private:
-    //attributs
-    static RelationManager* instance;
-    Relation** relations;
-    unsigned int nbRelations;
-    unsigned int nbMaxRelations;
-
-    //constructeurs, destructeur et opérateur d'affectation
-    RelationManager();
-    RelationManager(const RelationManager& rm); //ne pas implémenter pour ne pas avoir de copies du singleton
-    virtual ~RelationManager();
-    void operator=(const RelationManager& rm); //ne pas implémenter pour ne pas avoir de copies du singleton
-
-    //méthodes
-    void addRelation (Relation* r); //ajouter une relation a au tableau des relations
-
-public:
-    static RelationManager& getInstance(); //creer un instance unique RelationManager
-    static void freeInstance(); //liberer l'instance RelationManager
-    void deleteRelation(Relation& r); //supprimer une relation
-    const Relation& getNewRelation(const QString& t); //creer une nouvelle relation
-
-    //accesseur en lecture
-    const Relation& getRelation(const QString& t)const; //recuperer une relation a l'aide de son titre
-
-    //visualisation
-    void visualiserRelation(const Relation& r, QDebug f)const;
 };
 
 #endif // RELATION_H
