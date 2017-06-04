@@ -1,6 +1,5 @@
 #include <QApplication>
-#include "note.h"
-#include "date.h"
+#include "couple.h"
 
 using namespace std;
 

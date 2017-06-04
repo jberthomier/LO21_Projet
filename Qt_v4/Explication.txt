@@ -1,0 +1,57 @@
+/*
+On peut créer des relations
+	=> interface de création de relations
+On peut ajouter à une relation existante un couple de note ♦
+	=> interface de sélection d'une relation puis de sélection de deux notes dans un menu déroulant
+	Ce qui implique que:
+		#La relation que l'on veut mettre en place entre deux notes doit avoir été créée avant
+		#Après la sélection des deux notes: 
+			♣ -si le couple fait déjà partie de la relation, on renvoie un message d'erreur,
+			• -si le couple existe déjà mais ne fait pas encore partie de la relation, on fait seulement un ajout du couple dans l'ensemble des couples de cette relation,
+			◘ -si le couple n'existe pas, on crée le couple, on l'ajoute à l'ensemble des couples de CoupleManager et on l'ajoute dans l'ensemble des couples de cette relation,
+
+♦ il faut donc une méthode addCouple dans la classe Relation	
+♣ dans cette méthode addCouple, on parcourt le tableau de couple pour voir si la relation a déjà été mise en place pour ce couple
+• il faut pouvoir vérifier que le couple existe donc accéder à au tableau de couple de la classe CoupleManager.
+=> cela implique que la méthode addCouple doit pouvoir parcourir le tableau de couple de la classe CoupleManager. Or cet attribut est privé, on déclare donc la méthode addCouple amie de la classe CoupleManager. Peut-être mieux avec Iterator ???
+◘ pour créer le couple il faut appeler la méthode getNewCouple de la classe CoupleManager. Cette méthode étant privé (cf ci-dessous), il faut déclarer la méthode addCouple amie de la classe CoupleManager.
+
+Remarque: la méthode getNewCouple est privé car on ne veut pas pouvoir créer de couple sans y associer une relation. On n'a pas d'interface de création de couple.
+On a seulement une interface de création de relation et de mise en place d'une relation entre un couple de note. Cela permet à CoupleManager d'avoir un tableau
+de couple pour lequel il existe une relation, permettant d'accéder à l'arborescence des ascendant et descendant plus facilement.
+Cela veut dire que quand on enlève un couple d'une relation, il faut vérifier s'il appartient à une/des autre(s) relation(s). S'il n'appartient à aucune autre relation,
+il faut enlever le couple du tableau de couple de CoupleManager.
+			
+*/
+
+void Relation::addCouple(const Note &ns, const Note &nd);
+=> pour créer une relation entre deux éléments.
+Concrètement: 
+	- crée le couple de notes s'il n'existe pas
+	- ajoute le couple au tableau de couple de la relation
+	- ajoute la relation au tableau de relation du couple en question (appel à addRelation de la classe Couple)
+(Teste aussi s'il existe déjà une relation entre ces deux note: renvoie une exception.)
+	- dans cette méthode on a besoin d'avoir accès au tableau de couples de CoupleManager (attribut privé) pour savoir si le couple existe déjà.
+	Pour faire ça, on doit déclarer la méthode amie de la classe CoupleManager (ou iterator ?????????????)
+	De plus, on aura également besoin d'avoir accès au méthodes getCouple et getNewCouple. getNewCouple étant privé car on ne veut pas qu'il exite de couple
+	qui ne soit pas associé à au moins une relation, méthode amie.
+	
+void Relation::removeCouple(Couple& c);
+=> pour supprimer une relation entre deux éléments
+Concrètement:
+	- retire le couple du tableau de couple de la relation
+	- retire la relation du tableau de relation du couple (appel à removeRelation de la classe Couple)
+	- supprime le couple s'il n'appartient à aucune autre relation (appel à deleteCouple de la classe CoupleManager)
+	
+void RelationManager::addRelation (Relation* r);
+=> pour ajouter	une relation à la liste des relations
+Concrètement:
+	- ajoute la relation au tableau de relation de RelationManager
+	- cette méthode est déclaré privé car on veut que les opérations de création d'une relation et de "mémorisation" de la relationce fasse de manière atomique. 
+	Cette méthode sera appelé par le méthode getNewRelation de cette même classe, qui permet de créer une nouvelle relation.
+	
+	
+	
+	
+	
+	
