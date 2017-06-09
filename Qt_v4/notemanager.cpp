@@ -55,6 +55,24 @@ Note* NoteManager::makeNote() {
     }
 }
 
+Article* NoteManager::makeArticle() {
+    QString id = newId();
+    TIME::Date date;
+    return new Article(id,"",date,date,"");
+}
+
+Tache* NoteManager::makeTache() {
+    QString id = newId();
+    TIME::Date date;
+    return new Tache(id,"",date,date,0,date,En_cours, "");
+}
+
+Media* NoteManager::makeMedia() {
+    QString id = newId();
+    TIME::Date date;
+    return new Media(id,"", date, date, "","",image );
+}
+
 Note& NoteManager::getNote(const unsigned int id) {
 
     for (QVector<QVector<Note>>::iterator ite = versions.begin(); ite != versions.end(); ++ite) {
