@@ -26,6 +26,11 @@ private:
 public:
     static NoteManager& getInstance();
     Note* makeNote(); //comme on retourne un pointeur sur Note, ok même si la classe Note est abstraite
+    Article* makeArticle();
+    Tache* makeTache();
+    Media* makeMedia();
+    QString getFilename() const { return filename; }
+    void setFilename(const QString& f) { filename=f; }
     Note& getNote(const unsigned int id); //récupérer n'importe quelle note, même archivée ou dans la corbeille
     Note& getNoteActuelle(const unsigned int id);
     template<typename T> void editNote(const unsigned int id);
