@@ -182,4 +182,25 @@ void NoteManager::viderCorbeille() {
     }
 }
 
-void NoteManager::save() const {}
+void NoteManager::save() {
+    QFile newfile(filename);
+    if (!newfile.open(QIODevice::WriteOnly | QIODevice::Text))
+        throw NotesException(QString("erreur sauvegarde notes : ouverture fichier xml"));
+    QXmlStreamWriter stream(&newfile);
+    stream.setAutoFormatting(true);
+    stream.writeStartDocument();
+    stream.writeStartElement("notes");
+    for (QVector<QVector<Note>>::iterator ite = versions.begin(); ite != versions.end(); ++ite) {
+        for (QVector<Note>::iterator ite2 = (*ite).begin(); ite2 != (*ite).end(); ++ite2)
+        {
+        stream.writeStartElement("note");
+        stream.writeTextElement("id",(*ite2).getId());
+        stream.writeTextElement("titre",(*ite2).getTitre());
+        stream.writeEndElement();
+    }
+    stream.writeEndElement();
+    stream.writeEndDocument();
+    newfile.close();
+    }
+}
+
