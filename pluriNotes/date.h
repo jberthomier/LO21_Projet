@@ -16,13 +16,11 @@
     static QTextStream ts( stdout );
     return ts;
 }
-
 QTextStream& cin
 {
     static QTextStream ts( stdin );
     return ts;
 }
-
 */
 namespace TIME {
 

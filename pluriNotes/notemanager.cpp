@@ -41,7 +41,7 @@ Media* NoteManager::makeMedia() {
     return new Media(id,"", date, date, "","",image );
 }
 
-Note& NoteManager::getNote(const unsigned int id) {
+Note& NoteManager::getNote(QString id) {
 
     for (QVector<QVector<Note*>>::iterator ite = versions.begin(); ite != versions.end(); ++ite) {
         for (QVector<Note*>::iterator ite2 = (*ite).begin(); ite2 != (*ite).end(); ++ite2) {
@@ -51,7 +51,7 @@ Note& NoteManager::getNote(const unsigned int id) {
     throw NotesException("la note n'existe pas");
 }
 
-Note& NoteManager::getNoteActuelle(const unsigned int id) { //rechercher la version active de la note correspondant à l'id
+Note& NoteManager::getNoteActuelle(QString id) { //rechercher la version active de la note correspondant à l'id
     // 1) rechercher le vector dans lequel se trouve la note correspondant à l'id en argument
     int position = -1;
     QVector<Note*> v;
@@ -71,7 +71,7 @@ Note& NoteManager::getNoteActuelle(const unsigned int id) { //rechercher la vers
     throw NotesException("Aucune version active trouvee pour cette note.");
 }
 
-void NoteManager::restaurerNote(const unsigned int id) {
+void NoteManager::restaurerNote(QString id) {
         Note* oldNote = &getNote(id);
 //test pour vérifier que la note à restaurer n'est pas active. Si elle est déjà active, ne rien faire.
         if (oldNote->isActive()==false && oldNote->inCorbeille()==true) {
@@ -86,7 +86,7 @@ void NoteManager::restaurerNote(const unsigned int id) {
         }
 }
 
-void NoteManager::supprimerNoteActuelle(const unsigned int id) {
+void NoteManager::supprimerNoteActuelle(QString id) {
     QVector<Note*> v;
     Note * oldNote;
     int position = -1;
@@ -118,7 +118,7 @@ void NoteManager::supprimerNoteActuelle(const unsigned int id) {
     note->restaurer();
 }
 
-void NoteManager::supprimerVersions(const unsigned int id) {
+void NoteManager::supprimerVersions(QString id) {
 //Mettre dans la corbeille ou en archive toutes les versions de la note active passée en argument
     QVector<Note*> v;
     for (QVector<QVector<Note*>>::iterator ite = versions.begin(); ite != versions.end(); ++ite) {
@@ -173,3 +173,38 @@ void NoteManager::save() const {
     }*/
 }
 
+QList<Note*> NoteManager::getActiveNotes(){
+    QList<Note*> result;
+    for (QVector<QVector<Note*>>::iterator ite = versions.begin(); ite != versions.end(); ++ite) {
+        for (QVector<Note*>::iterator ite2 = (*ite).begin(); ite2 != (*ite).end(); ++ite2) {
+            if  ((*ite2)->isActive()==true)
+                result.push_back((*ite2));
+        }
+    }
+    return result;
+}
+
+QList<Note*> NoteManager::getArchiveNotes(){
+    QList<Note*> result;
+    for (QVector<QVector<Note*>>::iterator ite = versions.begin(); ite != versions.end(); ++ite) {
+        for (QVector<Note*>::iterator ite2 = (*ite).begin(); ite2 != (*ite).end(); ++ite2) {
+            if  ((*ite2)->isActive()==false)
+                result.push_back((*ite2));
+        }
+    }
+    return result;
+}
+
+QList<Tache*> NoteManager::getSortedTasks(){
+    QList<Tache*> result;
+    for (QVector<QVector<Note*>>::iterator ite = versions.begin(); ite != versions.end(); ++ite) {
+        for (QVector<Note*>::iterator ite2 = (*ite).begin(); ite2 != (*ite).end(); ++ite2) {
+            Tache * tache = dynamic_cast<Tache*>(*ite2);
+            if  ( tache!=nullptr) //test pour savoir si c'est une tache
+                result.push_back(tache);
+        }
+     }
+    //tri de la liste result (liste de taches) selon la priorité
+    qSort(result);
+    return result;
+}

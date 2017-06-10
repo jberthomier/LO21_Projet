@@ -93,3 +93,7 @@ void Tache::print() const {
 void Media::print() const{
     qDebug()<< "Media :" << getDescription() << "\n" << "Chemin: \n" << getChemin() << "\n" << "TypeMedia: \n" << getTypeMedia() <<  "\n";
 }
+
+bool Tache::operator<(const Tache &tache) const{
+  return (priorite < tache.getPriorite());
+}
