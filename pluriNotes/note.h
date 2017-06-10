@@ -58,7 +58,7 @@ public :
     Note& operator=(Note const& note);
 
     //Le destructeur doit être virtuel pour respecter le principe de substitution.
-    virtual ~Note();
+    ~Note();
 
     //Accesseurs en lecture
     QString getId() const {return identificateur;}
@@ -124,6 +124,9 @@ public:
 
     //Définition de la méthode d'affichage
     void print() const;
+
+    //Opérateur de comparaison de la priorité des taches
+    bool operator<(const Tache &tache) const; //nécessaire pour permettre le tri des taches avec l'algorithme sort
 };
 
 class Media : public Note {

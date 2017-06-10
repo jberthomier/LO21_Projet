@@ -6,7 +6,8 @@ SOURCES += \
     note.cpp \
     couple.cpp \
     relation.cpp \
-    notemanager.cpp
+    notemanager.cpp \
+    plurinotes.cpp
 
 HEADERS += \
     date.h \
@@ -14,4 +15,8 @@ HEADERS += \
     couple.h \
     relation.h \
     notemanager.h \
-    relationmanager.h
+    relationmanager.h \
+    plurinotes.h
+
+FORMS += \
+    plurinotes.ui

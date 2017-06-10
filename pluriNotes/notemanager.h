@@ -2,6 +2,8 @@
 #define NOTEMANAGER_H
 
 #include <QVector>
+#include <QString>
+#include <QList>
 #include "couple.h"
 
 class NoteManager {
@@ -25,21 +27,24 @@ private:
 
 public:
     static NoteManager& getInstance();
-    Note* makeNote(); //comme on retourne un pointeur sur Note, ok même si la classe Note est abstraite
+   // Note* makeNote(); //comme on retourne un pointeur sur Note, ok même si la classe Note est abstraite
     Article* makeArticle();
     Tache* makeTache();
     Media* makeMedia();
-    Note& getNote(const unsigned int id); //récupérer n'importe quelle note, même archivée ou dans la corbeille
-    Note& getNoteActuelle(const unsigned int id);
-    template<typename T> void editNote(const unsigned int id);
-    void restaurerNote(const unsigned int id);
-    void supprimerNoteActuelle(const unsigned int id);
-    void supprimerVersions(const unsigned int id);
+    Note& getNote(QString id); //récupérer n'importe quelle note, même archivée ou dans la corbeille
+    Note& getNoteActuelle(QString id);
+    template<typename T> void editNote(QString id);
+    void restaurerNote(QString id);
+    void supprimerNoteActuelle(QString id);
+    void supprimerVersions(QString id);
     void viderCorbeille();
     void save() const; //à faire !
+    QList<Note*> getActiveNotes(); //retourne la liste des notes actives
+    QList<Note*> getArchiveNotes(); //retourne la liste des notes archivées
+    QList<Tache*> getSortedTasks(); //retourne une liste de taches triées selon la priorité pour l'affichage
 };
 
-template<typename T> void NoteManager::editNote(const unsigned int id) {
+template<typename T> void NoteManager::editNote(QString id) {
     try {
         T t = getNote(id);
         if (t.isActive() == false)

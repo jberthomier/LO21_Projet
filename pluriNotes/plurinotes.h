@@ -37,6 +37,9 @@ public slots :
     //void openSettings();
     //void ouvrirNote(QListWidgetItem *item);
     //void nouvelleNote();
+    void updateActiveNotes();
+    void updateArchiveNotes();
+    void updateSortedTasks();
 private slots:
 
 };
