@@ -1,5 +1,6 @@
 #include <QApplication>
 #include "couple.h"
+#include "plurinotes.h"
 
 using namespace std;
 
