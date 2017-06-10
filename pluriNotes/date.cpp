@@ -1,8 +1,9 @@
 #include "date.h"
 
 using namespace TIME;
+using namespace std;
 
-QTextStream& operator<<(QTextStream& f,const Date& x){ x.afficher(f); return f;}
+//ostream& operator<<(ostream& f,const Date& x){ x.afficher(f); return f;}
 
 Date::Date() { //date actuelle
     std::time_t result = std::time(nullptr); // nombre de secondes depuis le 01/01/1970
@@ -22,9 +23,18 @@ void Date::setDate(unsigned short int j, unsigned short int m, unsigned int a){
     }
 }
 
-void Date::afficher(QTextStream& f) const{
+QString Date::afficher() const{
     // affiche le date sous le format JJ/MM/AAAA
-    f<<jour<<"/"<<mois<<"/"<<annee<<" "; //a completer pour avoir 03/05/1998 par exemple, complete avec des 0 si un seul chiffre pour le jour ou le mois
+    QString f;
+    QString jourStr= QString::number(jour);
+    if (jourStr.length()==1) jourStr.prepend("0");
+    f.append(jourStr); f.append("/");
+    QString moisStr = QString::number(mois);
+    if (moisStr.length()==1) moisStr.prepend("0");
+    f.append(moisStr); f.append("/");
+    QString anneeStr = QString::number(annee);
+    f.append(anneeStr);
+    return f;
 }
 
 bool Date::operator==(const Date& d) const{

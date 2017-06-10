@@ -69,7 +69,7 @@ public :
     bool inCorbeille() const { return corbeille; }
 
     //Méthode d'affichage virtuelle pure à définir dans les classes filles
-    virtual void print(QTextStream& f=qtout) const = 0;
+    virtual void print() const = 0;
 };
 
 class Article : public Note {
@@ -92,7 +92,7 @@ public:
     QString getTexte() const {return texte;}
 
     //Définition de la méthode d'affichage
-    void print(QTextStream& f=qtout) const;
+    void print() const;
 
 };
 
@@ -123,7 +123,7 @@ public:
     Statut getStatut() const {return etat;}
 
     //Définition de la méthode d'affichage
-    void print(QTextStream& f=qtout) const;
+    void print() const;
 };
 
 class Media : public Note {
@@ -150,7 +150,7 @@ public :
     mType getTypeMedia() const {return typeMedia;}
 
     //Définition de la méthode d'affichage
-    void print(QTextStream& f=qtout) const;
+    void print() const;
 
 };
 

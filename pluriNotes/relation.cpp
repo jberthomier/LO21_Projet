@@ -11,9 +11,9 @@ Relation::~Relation(){
 
 void Relation::getCouples() const {
     for (unsigned int i=0; i<nbCouples; i++){
-        qtout<<"Label: "<<couples[i]->getLabel();
+        qDebug()<<"Label: "<<couples[i]->getLabel();
         if (orientation){
-            qtout<<"Note source: "<<couples[i]->getNoteSource().getTitre()<<" Note destination: "<<couples[i]->getNoteDestination().getTitre()<<"\n";
+            qDebug()<<"Note source: "<<couples[i]->getNoteSource().getTitre()<<" Note destination: "<<couples[i]->getNoteDestination().getTitre()<<"\n";
         }
     }
 }
@@ -140,7 +140,7 @@ const Relation& RelationManager::getRelation(const QString& t) const{
 }
 
 void RelationManager::visualiserRelation(const Relation& r)const{
-    qtout<<"Titre: "<<r.getTitre()<<"\nDescription: "<<r.getDescription()<<"\nCouples: ";
+    qDebug()<<"Titre: "<<r.getTitre()<<"\nDescription: "<<r.getDescription()<<"\nCouples: ";
     for (unsigned int i=0; i<r.getNbCouples(); i++){
         r.getCouples();
     }

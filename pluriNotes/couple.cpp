@@ -121,19 +121,19 @@ Couple& CoupleManager::getCouple(const Note &ns, const Note &nd)const{
 }
 
 void CoupleManager::afficherAscendants(const Note& n){
-    qtout<<"Ascendants: ";
+    qDebug()<<"Ascendants: ";
     for (unsigned int i=0; i<nbCouples; i++){
         if (couples[i]->getNoteDestination().getTitre()==n.getTitre()){
-            qtout<<couples[i]->getNoteSource().getTitre();
+            qDebug()<<couples[i]->getNoteSource().getTitre();
         }
     }
 }
 
 void CoupleManager::afficherDescendants(const Note& n){
-    qtout<<"Descendants: ";
+    qDebug()<<"Descendants: ";
     for (unsigned int i=0; i<nbCouples; i++){
         if (couples[i]->getNoteSource().getTitre()==n.getTitre()){
-            qtout<<couples[i]->getNoteDestination().getTitre();
+            qDebug()<<couples[i]->getNoteDestination().getTitre();
         }
     }
 }

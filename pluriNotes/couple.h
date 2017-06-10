@@ -33,7 +33,7 @@ public:
     const Note& getNoteDestination() const {return noteDestination;}
     void getRelations()const{ //récupérer toutes les relations mises en place pour un couple de notes
         for (unsigned int i=0; i<nbRelations; i++){
-            qtout<<"Label: "<<relations[i]->getTitre();
+            qDebug()<<"Label: "<<relations[i]->getTitre();
         }
     }
 

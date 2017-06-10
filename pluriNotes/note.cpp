@@ -24,8 +24,8 @@ Article* Article::edit(){
     TIME::Date d;
     newArticle->setDdm(d);
     QString t;
-    qtout<< "Entrez le nouveau texte : " << endl;
-    qtin>> t;
+    qDebug()<< "Entrez le nouveau texte : " << endl;
+    //qtin>> t;
     newArticle->setText(t);
     return newArticle;
 }
@@ -41,24 +41,24 @@ Tache* Tache::edit() {
     this->archiver();
     newTask->setDdm(d);
 
-    qtout<< "Entrez l'action de la tache : " << endl;
-    qtin>> a;
+    qDebug()<< "Entrez l'action de la tache : " << endl;
+    //qtin>> a;
     newTask->setAction(a);
-    qtout<< "Entrez la priorite de la tache : " << endl;
-    qtin>> p;
+    qDebug()<< "Entrez la priorite de la tache : " << endl;
+    //qtin>> p;
     newTask->setPriorite(p);
 
-    qtout<< "Entrez le jour d'echeance de la tache : " << endl;
-    qtin>> day;
-    qtout<< "Entrez le mois d'echeance de la tache : " << endl;
-    qtin>> month;
-    qtout<< "Entrez l'annee d'echeance de la tache : " << endl;
-    qtin>> year;
+    qDebug()<< "Entrez le jour d'echeance de la tache : " << endl;
+    //qtin>> day;
+    qDebug()<< "Entrez le mois d'echeance de la tache : " << endl;
+    //qtin>> month;
+    qDebug()<< "Entrez l'annee d'echeance de la tache : " << endl;
+    //qtin>> year;
     d_echeance.setDate(day, month, year);
     newTask->setEcheance(d_echeance);
 
-    qtout<< "Entrez le statut de la tache : " << endl;
-    qtin>> e;
+    qDebug()<< "Entrez le statut de la tache : " << endl;
+    //qtin>> e;
     switch (e) {
     case 0:
         newTask->setEtat(En_attente);
@@ -70,7 +70,7 @@ Tache* Tache::edit() {
         newTask->setEtat(Terminee);
         break;
     default:
-        qtout<< "Statut inconnu." << endl;
+        qDebug()<< "Statut inconnu." << endl;
     }
     return newTask;
 }
@@ -79,17 +79,17 @@ Media* Media::edit(){
     return this;
 }
 
-void Article::print(QTextStream& f) const {
-    f<< "Article : " << getTitre() << "\n" << "texte:\n" << getTexte() << "\n";
+void Article::print() const {
+    qDebug()<< "Article : " << getTitre() << "\n" << "texte:\n" << getTexte() << "\n";
 }
 
-void Tache::print(QTextStream& f) const {
-    f<< "Tache : " << getTitre() << "\n" << "Action :\n" << getAction() << "\n" << "Priorite :\n" << getPriorite() << "\n" << "Statut :\n" << getStatut() << "\n";
-    f<< "Echeance :\n";
+void Tache::print() const {
+    qDebug()<< "Tache : " << getTitre() << "\n" << "Action :\n" << getAction() << "\n" << "Priorite :\n" << getPriorite() << "\n" << "Statut :\n" << getStatut() << "\n";
+    qDebug()<< "Echeance :\n";
     TIME::Date d = getEcheance();
-    d.afficher(f);
+    d.afficher();
 }
 
-void Media::print(QTextStream& f) const{
-    f<< "Media :" << getDescription() << "\n" << "Chemin: \n" << getChemin() << "\n" << "TypeMedia: \n" << getTypeMedia() <<  "\n";
+void Media::print() const{
+    qDebug()<< "Media :" << getDescription() << "\n" << "Chemin: \n" << getChemin() << "\n" << "TypeMedia: \n" << getTypeMedia() <<  "\n";
 }

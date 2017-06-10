@@ -23,38 +23,6 @@ NoteManager& NoteManager::getInstance() {
     return *instance;
 }
 
-Note* NoteManager::makeNote() {
-    int choice;
-    QString id = newId();
-    TIME::Date date;
-    QString titre;
-    bool ok = false;
-    while (ok == false) {
-        qtout<< "Quel type de note souhaitez-vous créer :" << endl << "1 : Article" << endl << "2 : Tache" << endl << "3 : Media" << endl;
-        qtin>> choice;
-        switch (choice) {
-        case 1:
-            qtout<< "Entrez le titre de votre note : ";
-            qtin>> titre;
-            qtout<< endl;
-            return new Article(id, titre, date, date, "");
-            ok = true;
-            break;
-        case 2:
-            return new Tache();
-            ok = true;
-            break;
-        case 3:
-            return new Media();
-            ok = true;
-            break;
-        default:
-            qtout<< "Type invalide." << endl;
-            break;
-        }
-    }
-}
-
 Article* NoteManager::makeArticle() {
     QString id = newId();
     TIME::Date date;
