@@ -5,7 +5,7 @@
 void Couple::addRelation(Relation* r){
     for (unsigned int i=0; i<nbRelations; i++){
         if (relations[i]->getTitre()==r->getTitre()){
-            throw NotesException("Erreur: la relation entre ces deux notes existe déjà existe déjà.");
+            throw NoteException("Erreur: la relation entre ces deux notes existe déjà existe déjà.");
         }
     }
     if (nbRelations==nbMaxRelations){
@@ -51,7 +51,7 @@ CoupleManager::~CoupleManager(){
 void CoupleManager::addCouple(Couple* c){
     for (unsigned int i=0; i<nbCouples; i++){
         if (couples[i]->getLabel()==c->getLabel()){
-            throw NotesException("Erreur: la relation existe déjà.");
+            throw NoteException("Erreur: la relation existe déjà.");
         }
     }
     if (nbCouples==nbMaxCouples){
@@ -108,7 +108,7 @@ Couple& CoupleManager::getCouple(const QString& l)const{
             return *couples[i];
         }
     }
-    throw NotesException("Erreur: il n'existe pas de relation avec ce titre.");
+    throw NoteException("Erreur: il n'existe pas de relation avec ce titre.");
 }
 
 Couple& CoupleManager::getCouple(const Note &ns, const Note &nd)const{
@@ -117,7 +117,7 @@ Couple& CoupleManager::getCouple(const Note &ns, const Note &nd)const{
             return *couples[i];
         }
     }
-    throw NotesException("Erreur: il n'existe pas de relation entre ces deux notes.");
+    throw NoteException("Erreur: il n'existe pas de relation entre ces deux notes.");
 }
 
 void CoupleManager::afficherAscendants(const Note& n){
