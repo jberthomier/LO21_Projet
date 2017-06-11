@@ -6,19 +6,7 @@
 PluriNotes::PluriNotes(QWidget *parent) : QMainWindow(parent)
 {
     ui.setupUi(this);
-    /*qDebug()<<"launched";
-    ui->setupUi(this);
-    FilePath = QDir::currentPath() + "/config.ini";
-    QFileInfo file_path(FilePath);
-    if (!file_path.exists()){
-        QSettings* settings = new QSettings(FilePath, QSettings::IniFormat);
-        settings->setValue("folder", QDir::currentPath());
-        settings->sync();
-        qDebug()<<"file created"<<endl;
-    }*/
 
-    //loadSettings();
-    //ouvrirProjet();
     QObject::connect(ui.actionArticle, SIGNAL(triggered()), this, SLOT(newArticle()));
     QObject::connect(ui.actionTache, SIGNAL(triggered()), this, SLOT(newTache()));
     QObject::connect(ui.actionMedia, SIGNAL(triggered()), this, SLOT(newMedia()));
@@ -27,9 +15,6 @@ PluriNotes::PluriNotes(QWidget *parent) : QMainWindow(parent)
     updateActiveNotes(); //création de la liste des notes actives
     updateArchiveNotes(); //création de la liste des notes archivées
     updateSortedTasks();
-     /*Par contre les notes créées lors de la session ne s'affichent pas, il faudra rappeler update après la création d'une note.*/
-
-
 }
 
 PluriNotes::~PluriNotes()
@@ -41,8 +26,8 @@ void newArticle()
 {
         NoteManager& m = NoteManager::getInstance();
 
-        Article* a= m.makeArticle();
-        //ouvrirNote(a);
+        Article* a= m.makeArticle();        
+        AffichageNote::afficheNote(*a);
 }
 
 void newTache()
@@ -64,8 +49,8 @@ void newMedia()
 void getChemin (QListWidgetItem* id) {
     NoteManager& m = NoteManager::getInstance();
     Note& n=m.getNote(id->text());
-    qDebug()<<"Ouvertude note"<<id->text();
-    //ui.AffichageNote->ouvrirNote(&n);
+    qDebug()<<"Ouverture note"<<id->text();
+    AffichageNote::afficheNote(n);
 }
 
 void PluriNotes::updateActiveNotes(){
@@ -86,4 +71,14 @@ void PluriNotes::updateSortedTasks(){ //veut-on aussi afficher la date et la pri
     for(auto ite = notes.begin(); ite != notes.end(); ++ite) {
         ui.taskList->addItem((*ite)->getId());
     }
+}
+
+
+void PluriNotes::ouvrirNote(QListWidgetItem* item) {
+
+    NoteManager& m = NoteManager::getInstance();
+    Note& n = m.getNote(item->text());
+    qDebug()<<"ouverture note"<<item->text();
+    AffichageNote::afficheNote(n);
+
 }

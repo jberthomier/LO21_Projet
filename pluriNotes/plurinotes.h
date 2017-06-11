@@ -16,6 +16,7 @@
 #include <QDirIterator>
 #include "NoteManager.h"
 #include "ui_PluriNotes.h"
+#include "affichagenote.h"
 
 
 class PluriNotes : public QMainWindow
@@ -25,18 +26,15 @@ class PluriNotes : public QMainWindow
 public:
     PluriNotes(QWidget *parent = 0);
     virtual ~PluriNotes();
-    //void loadSettings();
 
 private:
     Ui::Plurinotes ui;
-    //void closeEvent(QCloseEvent *event);
 
     QString FilePath;
 
 public slots :
-    //void openSettings();
-    //void ouvrirNote(QListWidgetItem *item);
-    //void nouvelleNote();
+    void ouvrirNote(QListWidgetItem *item);
+
     void updateActiveNotes();
     void updateArchiveNotes();
     void updateSortedTasks();
