@@ -79,21 +79,6 @@ Media* Media::edit(){
     return this;
 }
 
-void Article::print() const {
-    qDebug()<< "Article : " << getTitre() << "\n" << "texte:\n" << getTexte() << "\n";
-}
-
-void Tache::print() const {
-    qDebug()<< "Tache : " << getTitre() << "\n" << "Action :\n" << getAction() << "\n" << "Priorite :\n" << getPriorite() << "\n" << "Statut :\n" << getStatut() << "\n";
-    qDebug()<< "Echeance :\n";
-    TIME::Date d = getEcheance();
-    d.afficher();
-}
-
-void Media::print() const{
-    qDebug()<< "Media :" << getDescription() << "\n" << "Chemin: \n" << getChemin() << "\n" << "TypeMedia: \n" << getTypeMedia() <<  "\n";
-}
-
 bool Tache::operator<(const Tache &tache) const{
   return (priorite < tache.getPriorite());
 }
