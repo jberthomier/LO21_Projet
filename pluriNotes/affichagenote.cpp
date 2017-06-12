@@ -54,12 +54,30 @@ void AffichageNote::afficheNote(Note* note) {
         }
     }
 
+
     NoteEditeur* window=createEditeur(note);
     connect(window,&NoteEditeur::Editing,this,&AffichageNote::unsavedChanges);
     connect(window,&NoteEditeur::Editionfinished,this,&AffichageNote::savedChanges);
 
     tabWidget->addTab(window,window->getId());
     tabWidget->setCurrentWidget(window);
+}
+
+void AffichageNote::afficheArticle(Article* article) {
+    for (int i = 0;i<tabWidget->count(); i++){
+        if (tabWidget->tabText(i)==article->getId() || tabWidget->tabText(i)=="*"+article->getId()) {
+            tabWidget->setCurrentIndex(i);
+    return;
+    }
+}
+
+    NoteEditeur* window=createEditeur(article);
+    connect(window,&NoteEditeur::Editing,this,&AffichageNote::unsavedChanges);
+    connect(window,&NoteEditeur::Editionfinished,this,&AffichageNote::savedChanges);
+
+    tabWidget->addTab(window,window->getId());
+    tabWidget->setCurrentWidget(window);
+
 }
 
 

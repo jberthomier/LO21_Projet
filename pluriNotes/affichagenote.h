@@ -28,6 +28,7 @@ class AffichageNote : public QWidget
 public:
     explicit AffichageNote(QWidget *parent = 0);
     void afficheNote(Note* note);
+    void afficheArticle(Article* article);
     void fermeNote(const QString& id);
     void refreshNote(const QString& id);
     bool ouverte(const QString& id);

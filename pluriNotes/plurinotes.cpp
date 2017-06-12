@@ -10,7 +10,7 @@ PluriNotes::PluriNotes(QWidget *parent) : QMainWindow(parent)
     QObject::connect(ui.actionArticle, SIGNAL(triggered()), this, SLOT(newArticle()));
     QObject::connect(ui.actionTache, SIGNAL(triggered()), this, SLOT(newTache()));
     QObject::connect(ui.actionMedia, SIGNAL(triggered()), this, SLOT(newMedia()));
-    QObject::connect(ui.actionOuvrir, SIGNAL(triggered()), this, SLOT(getChemin()));
+    QObject::connect(ui.actionOuvrir, SIGNAL(triggered()), this, SLOT(getChemin(QListWidgetItem* id)));
 
     updateActiveNotes(); //création de la liste des notes actives
     updateArchiveNotes(); //création de la liste des notes archivées
@@ -22,15 +22,15 @@ PluriNotes::~PluriNotes()
     //delete ui;
 }
 
-void newArticle()
+void PluriNotes::newArticle()
 {
         NoteManager& m = NoteManager::getInstance();
-
-        Article* a= m.makeArticle();        
-        AffichageNote::afficheNote(*a);
+        Article* a= m.makeArticle();
+        AffichageNote* viewer = new AffichageNote();
+        viewer->afficheArticle(a);
 }
 
-void newTache()
+void PluriNotes::newTache()
 {
         NoteManager& m = NoteManager::getInstance();
 
@@ -38,7 +38,7 @@ void newTache()
         //ouvrirNote(t);
 }
 
-void newMedia()
+void PluriNotes::newMedia()
 {
         NoteManager& m = NoteManager::getInstance();
 
@@ -46,11 +46,12 @@ void newMedia()
         //ouvrirNote(med);
 }
 
-void getChemin (QListWidgetItem* id) {
+void PluriNotes::getChemin (QListWidgetItem* id) {
     NoteManager& m = NoteManager::getInstance();
     Note& n=m.getNote(id->text());
     qDebug()<<"Ouverture note"<<id->text();
-    AffichageNote::afficheNote(n);
+    AffichageNote* viewer = new AffichageNote();
+    viewer->afficheNote(&n);
 }
 
 void PluriNotes::updateActiveNotes(){
@@ -79,6 +80,7 @@ void PluriNotes::ouvrirNote(QListWidgetItem* item) {
     NoteManager& m = NoteManager::getInstance();
     Note& n = m.getNote(item->text());
     qDebug()<<"ouverture note"<<item->text();
-    AffichageNote::afficheNote(n);
+    AffichageNote* viewer = new AffichageNote();
+    viewer->afficheNote(&n);
 
 }

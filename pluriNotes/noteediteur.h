@@ -61,37 +61,3 @@ public slots:
 
 #endif // NOTEEDITEUR_H
 
-/*
-//fenetre de verification de sauvegarde a la fermeture
-
-class NoteEditeurFermeture : public QDialog
-{
-public:
-
-    NoteEditeurFermeture(QWidget *parent = 0) :QDialog(parent)
-    {
-        Vlayout = new QVBoxLayout(this);
-        Hlayout = new QHBoxLayout(this);
-
-        text = new QLabel("Des changements ont ete effectues. Les sauvegarder ?");
-        closeBtn = new QPushButton("Non");
-        acceptBtn = new QPushButton("Oui");
-        Vlayout->addWidget(text);
-        Hlayout->addWidget(acceptBtn);
-        Hlayout->addWidget(closeBtn);
-
-        Vlayout->addLayout(Hlayout);
-        setModal(true);
-
-        connect(acceptBtn, SIGNAL(clicked()), this, SLOT(accept()));
-        connect(closeBtn, SIGNAL(clicked()), this, SLOT(reject()));
-        show();
-    }
-private:
-    QVBoxLayout* Vlayout;
-    QHBoxLayout* Hlayout;
-    QLabel *text;
-    QPushButton *closeBtn;
-
-    QPushButton *acceptBtn;
-};*/

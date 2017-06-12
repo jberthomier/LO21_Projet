@@ -32,8 +32,15 @@ private:
 
     QString FilePath;
 
+
+
 public slots :
     void ouvrirNote(QListWidgetItem *item);
+
+    void newArticle();
+    void newTache();
+    void newMedia();
+    void getChemin(QListWidgetItem *id);
 
     void updateActiveNotes();
     void updateArchiveNotes();

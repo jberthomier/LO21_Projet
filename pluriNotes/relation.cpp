@@ -21,7 +21,7 @@ void Relation::getCouples() const {
 void Relation::addCouple(const Note& ns, const Note& nd){
     for (unsigned int i=0; i<nbCouples; i++){
         if (couples[i]->getNoteSource().getTitre()==ns.getTitre() && couples[i]->getNoteDestination().getTitre()==nd.getTitre()){
-            throw NoteException("Erreur: la relation entre ces deux notes existe déjà existe déjà.");
+            throw NotesException("Erreur: la relation entre ces deux notes existe déjà existe déjà.");
         }
     }
     if (nbCouples==nbMaxCouples){
@@ -79,7 +79,7 @@ RelationManager::~RelationManager(){
 void RelationManager::addRelation (Relation* r){
     for (unsigned int i=0; i<nbRelations; i++){
         if (relations[i]->getTitre()==r->getTitre()){
-            throw NoteException("Erreur: la relation existe déjà.");
+            throw NotesException("Erreur: la relation existe déjà.");
         }
     }
     if (nbRelations==nbMaxRelations){
@@ -136,7 +136,7 @@ const Relation& RelationManager::getRelation(const QString& t) const{
             return *relations[i];
         }
     }
-    throw NoteException("Erreur: il n'existe pas de relation avec ce titre.");
+    throw NotesException("Erreur: il n'existe pas de relation avec ce titre.");
 }
 
 void RelationManager::visualiserRelation(const Relation& r)const{
