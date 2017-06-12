@@ -22,22 +22,19 @@ private :
 
     QHBoxLayout * cid;
     QHBoxLayout * ctitre;
-    QHBoxLayout * ctext;
     QVBoxLayout * couche;
     QLabel *id1;
-    QLabel *titre1;
-    QLabel *text1;
+    QLabel *titre1;    
     QPushButton *save;
     QLineEdit *id;
     QLineEdit *titre;
-    QTextEdit *text;
     Note * note;
 
     NoteEditeur(NoteEditeur& );
     NoteEditeur& operator=(NoteEditeur const&);
 
 protected :
-    QHBoxLayout *centralLayout;
+    QHBoxLayout *layout;
     Note* getNote() const { return note; }
 
 public:
@@ -45,7 +42,7 @@ public:
     virtual ~NoteEditeur();
     const QString getId() const { return id->text(); }
     static QVector<NoteEditeur*> editeurs;
-    void SaveNote()const {getNote()->saveNote();}
+    void SaveNote();
 
 signals:
     void Editing(NoteEditeur* f);

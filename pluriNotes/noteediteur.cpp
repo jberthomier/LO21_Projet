@@ -10,29 +10,25 @@ NoteEditeur::NoteEditeur(Note* n,QWidget *parent) :
  {
     id = new QLineEdit();
     titre = new QLineEdit();
-    text = new QTextEdit();
+
     save = new QPushButton("Sauvegarder");
     id1 = new QLabel("Identificateur");
     titre1 = new QLabel("Titre");
-    text1 = new QLabel("Texte");
+    layout = new QHBoxLayout;
     cid = new QHBoxLayout;
     ctitre = new QHBoxLayout;
-    ctext = new QHBoxLayout;
     couche = new QVBoxLayout;
 
     cid->addWidget(id1);
     cid->addWidget(id);
     ctitre->addWidget(titre1);
     ctitre->addWidget(titre);
-    ctext->addWidget(text1);
-    ctext->addWidget(text);
+
 
     couche->addLayout(cid);
     couche->addLayout(ctitre);
-    couche->addLayout(ctext);
+    couche->addLayout(layout);
     couche->addWidget(save);
-
-    id->setReadOnly(true);
 
     id->setText(n->getId());
     titre->setText(n->getTitre());
@@ -57,15 +53,21 @@ NoteEditeur::~NoteEditeur()
 
 void NoteEditeur::saveNote() {
     //Maj de l'objet article
+    //qDebug()<<"Test4";
     note->setTitre(titre->text());
+    //qDebug()<<"Test5";
     //note->setTexte(text->toPlainText());
     //Sauvegarde dans le fichier xml
-    NoteManager::getInstance().save();
+    NoteManager::getInstance().save(note);
+    qDebug()<<"Test6";
     //Affichage d'un popup d'information
     QMessageBox::information(this,"Sauvegarde","Votre article a bien été sauvegardé");
+    qDebug()<<"Test7";
     //Le bouton de sauvegarde est grisé
     save->setEnabled(false);
+    qDebug()<<"Test8";
     emit Editionfinished(this);
+    qDebug()<<"Test9";
 }
 
 void NoteEditeur::activeSave(){

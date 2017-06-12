@@ -16,14 +16,14 @@ TacheEditeur::TacheEditeur(Tache* t, QWidget* parent) : NoteEditeur(t,parent)
 
     //echeance = new QDate;
 
-    centralLayout->addWidget(act1);
-    centralLayout->addWidget(action);
+    layout->addWidget(act1);
+    layout->addWidget(action);
 
-    centralLayout->addWidget(prior);
-    centralLayout->addWidget(priorite);
+    layout->addWidget(prior);
+    layout->addWidget(priorite);
 
-    centralLayout->addWidget(dateE);
-    //centralLayout->addWidget(echeance);
+    layout->addWidget(dateE);
+    //layout->addWidget(echeance);
 
     action->setText(t->getAction());
     priorite->value();

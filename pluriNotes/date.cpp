@@ -82,7 +82,7 @@ Date Date::operator+(unsigned int nb_jours) const{
     return d;
 }
 
-std::istream& operator>>(std::istream& flot, TIME::Date& date){
+/*std::istream& operator>>(std::istream& flot, QDate& date){
     unsigned int short j,m,a;
     bool ok=true;
     flot>>j;
@@ -111,3 +111,4 @@ std::istream& operator>>(std::istream& flot, TIME::Date& date){
     if (ok) date=Date(j,m,a); else flot.clear(std::ios::failbit);
     return flot;
 }
+*/

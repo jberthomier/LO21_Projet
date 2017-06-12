@@ -18,10 +18,10 @@ Note& Note::operator=(Note const& note) {
 
 /*------------------------------------------------------Méthodes des classes filles-------------------------------------------------------*/
 
-Article* Article::edit(){
+/*Article* Article::edit(){
     Article* newArticle = new Article(*this);
     this->archiver();
-    TIME::Date d;
+    QDate d;
     newArticle->setDdm(d);
     QString t;
     qDebug()<< "Entrez le nouveau texte : " << endl;
@@ -33,8 +33,8 @@ Article* Article::edit(){
 Tache* Tache::edit() {
     QString a;
     unsigned int p, day, month, year;
-    TIME::Date d_echeance(day,month,year);
-    TIME::Date d; //date actuelle
+    QDate d_echeance(day,month,year);
+    QDate d; //date actuelle
     int e;
 
     Tache* newTask = new Tache(*this);
@@ -78,6 +78,7 @@ Tache* Tache::edit() {
 Media* Media::edit(){
     return this;
 }
+*/
 
 void Article::print() const {
     qDebug()<< "Article : " << getTitre() << "\n" << "texte:\n" << getTexte() << "\n";
@@ -86,8 +87,8 @@ void Article::print() const {
 void Tache::print() const {
     qDebug()<< "Tache : " << getTitre() << "\n" << "Action :\n" << getAction() << "\n" << "Priorite :\n" << getPriorite() << "\n" << "Statut :\n" << getStatut() << "\n";
     qDebug()<< "Echeance :\n";
-    TIME::Date d = getEcheance();
-    d.afficher();
+    QDate d = getEcheance();
+    qDebug()<<d;
 }
 
 void Media::print() const{

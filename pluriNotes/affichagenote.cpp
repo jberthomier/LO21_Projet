@@ -29,9 +29,14 @@ NoteEditeur* AffichageNote::createEditeur(Note* n) {
     }
     qDebug()<<"Ajout editeur";
     NoteEditeur* edit=NULL;
+    qDebug()<<"Entree18";
     QString type= n->getType();
+    qDebug()<<type;
     if (type=="article") {
-        edit = new ArticleEditeur(dynamic_cast<Article*>(n));
+        qDebug()<<"Entree19";
+        Article* a=dynamic_cast<Article*>(n);
+        qDebug()<<"Entree20";
+        edit = new ArticleEditeur(a);
         qDebug()<<"article";
     }
     /*if (type=="tache") {
@@ -64,19 +69,29 @@ void AffichageNote::afficheNote(Note* note) {
 }
 
 void AffichageNote::afficheArticle(Article* article) {
+    qDebug()<<"Entree7";
+    int j = tabWidget->count();
+    qDebug()<<j;
     for (int i = 0;i<tabWidget->count(); i++){
+        qDebug()<<"Entree8";
         if (tabWidget->tabText(i)==article->getId() || tabWidget->tabText(i)=="*"+article->getId()) {
+            qDebug()<<"Entree9";
             tabWidget->setCurrentIndex(i);
+    qDebug()<<"Entree10";
     return;
     }
 }
-
+    qDebug()<<"Entree11";
     NoteEditeur* window=createEditeur(article);
+    qDebug()<<"Entree12";
     connect(window,&NoteEditeur::Editing,this,&AffichageNote::unsavedChanges);
+    qDebug()<<"Entree13";
     connect(window,&NoteEditeur::Editionfinished,this,&AffichageNote::savedChanges);
-
+    qDebug()<<"Entree14";
     tabWidget->addTab(window,window->getId());
+    qDebug()<<"Entree15";
     tabWidget->setCurrentWidget(window);
+    qDebug()<<"Entree17";
 
 }
 

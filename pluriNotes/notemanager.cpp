@@ -1,5 +1,8 @@
 #include "notemanager.h"
+#include "plurinotes.h"
 #include <QFile>
+#include<QDate>
+
 using namespace std;
 
 NoteManager* NoteManager::instance = NULL;
@@ -11,7 +14,7 @@ unsigned int NoteManager::newId() {
 NoteManager::NoteManager() : versions(0), id(0) {}
 
 NoteManager::~NoteManager() {
-    save(); //fonction qui sauve le texte des Notes sur un fichier en mémoire
+    saveAll(); //fonction qui sauve le texte des Notes sur un fichier en mémoire
     versions.clear(); // destruction des vecteurs internes. les destructeurs appelés libèrent la mémoire automatiquement
 }
 
@@ -25,20 +28,28 @@ NoteManager& NoteManager::getInstance() {
 
 Article* NoteManager::makeArticle() {
     //QString id = newId();
-    TIME::Date date;
-    return new Article("","",date,date,"","");
-    //NoteManager& m = getInstance();
+    qDebug()<<"Entree1";
+    //QDate date;
+    QDate date = QDate::currentDate();
+    qDebug()<<"Entree3";
+    Article* a= new Article("","",date,date,"","");
+    QVector<Note*> NewNote;
+    NewNote.push_back(a);
+    versions.push_back(NewNote);
+
+    return a;
+    //
 }
 
 Tache* NoteManager::makeTache() {
     QString id = newId();
-    TIME::Date date;
+    QDate date;
     return new Tache(id,"",date,date,"",0,date,En_cours, "");
 }
 
 Media* NoteManager::makeMedia() {
     QString id = newId();
-    TIME::Date date;
+    QDate date;
     return new Media(id,"", date, date,"", "","",image );
 }
 
@@ -108,7 +119,7 @@ void NoteManager::supprimerNoteActuelle( QString  id) {
         if (position != -1) break;
     }
     //trouver la version à restaurer : tri sur la date de dernière modification la plus récente
-    TIME::Date date = v[0]->getDateM();
+    QDate date = v[0]->getDateM();
     Note * note = NULL;
     for (int i = 0; i < v.size(); i++) {
             if ( date<v[i]->getDateM() && oldNote->getId()!= v[i]->getId() ) {
@@ -152,26 +163,30 @@ void NoteManager::viderCorbeille() {
     }
 }
 
-void NoteManager::save() const {
-/*    QFile newfile(filename);
+void NoteManager::save(Note* n) const {
+    n->saveNote();
+}
+
+void NoteManager::saveAll() const{
+     QFile newfile(filename);
     if (!newfile.open(QIODevice::WriteOnly | QIODevice::Text))
         throw NotesException(QString("erreur sauvegarde notes : ouverture fichier xml"));
     QXmlStreamWriter stream(&newfile);
     stream.setAutoFormatting(true);
     stream.writeStartDocument();
     stream.writeStartElement("notes");
-    for (QVector<QVector<Note*>>::iterator ite = versions.begin(); ite != versions.end(); ++ite) {
-        for (QVector<Note*>::iterator ite2 = (*ite).begin(); ite2 != (*ite).end(); ++ite2)
+    for (auto ite = versions.begin(); ite != versions.end(); ++ite) {
+        for (auto ite2 = (*ite).begin(); ite2 != (*ite).end(); ++ite2)
         {
         stream.writeStartElement("note");
-        stream.writeTextElement("id",(*ite2).getId());
-        stream.writeTextElement("titre",(*ite2).getTitre());
+        stream.writeTextElement("id",(*ite2)->getId());
+        stream.writeTextElement("titre",(*ite2)->getTitre());
         stream.writeEndElement();
     }
     stream.writeEndElement();
     stream.writeEndDocument();
     newfile.close();
-    }*/
+    }
 }
 
 QList<Note*> NoteManager::getActiveNotes(){

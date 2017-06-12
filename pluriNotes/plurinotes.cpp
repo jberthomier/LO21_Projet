@@ -10,7 +10,7 @@ PluriNotes::PluriNotes(QWidget *parent) : QMainWindow(parent)
     QObject::connect(ui.actionArticle, SIGNAL(triggered()), this, SLOT(newArticle()));
     QObject::connect(ui.actionTache, SIGNAL(triggered()), this, SLOT(newTache()));
     QObject::connect(ui.actionMedia, SIGNAL(triggered()), this, SLOT(newMedia()));
-    QObject::connect(ui.actionOuvrir, SIGNAL(triggered()), this, SLOT(getChemin(QListWidgetItem* id)));
+    QObject::connect(ui.actionOuvrir, SIGNAL(triggered()), this, SLOT(getChemin(QListWidgetItem*)));
 
     updateActiveNotes(); //création de la liste des notes actives
     updateArchiveNotes(); //création de la liste des notes archivées
@@ -24,10 +24,22 @@ PluriNotes::~PluriNotes()
 
 void PluriNotes::newArticle()
 {
+
         NoteManager& m = NoteManager::getInstance();
         Article* a= m.makeArticle();
+         qDebug()<<"Entree4";
         AffichageNote* viewer = new AffichageNote();
+         qDebug()<<"Entree5";
         viewer->afficheArticle(a);
+         qDebug()<<"Entree6";
+        viewer->show();
+        qDebug()<<"Entree6-1";
+        this->updateActiveNotes();
+        "Test1";
+        this->updateArchiveNotes();
+        "Test2";
+        this->updateSortedTasks();
+        "Test3";
 }
 
 void PluriNotes::newTache()
@@ -52,6 +64,7 @@ void PluriNotes::getChemin (QListWidgetItem* id) {
     qDebug()<<"Ouverture note"<<id->text();
     AffichageNote* viewer = new AffichageNote();
     viewer->afficheNote(&n);
+    viewer->show();
 }
 
 void PluriNotes::updateActiveNotes(){
@@ -82,5 +95,6 @@ void PluriNotes::ouvrirNote(QListWidgetItem* item) {
     qDebug()<<"ouverture note"<<item->text();
     AffichageNote* viewer = new AffichageNote();
     viewer->afficheNote(&n);
+    viewer->show();
 
 }

@@ -8,11 +8,11 @@ MediaEditeur::MediaEditeur(Media *m, QWidget *parent) : NoteEditeur(m,parent)
     description = new QTextEdit;
     chemin = new QTextEdit;
 
-    centralLayout->addWidget(desc);
-    centralLayout->addWidget(description);
+    layout->addWidget(desc);
+    layout->addWidget(description);
 
-    centralLayout->addWidget(filepath);
-    centralLayout->addWidget(chemin);
+    layout->addWidget(filepath);
+    layout->addWidget(chemin);
 
     desc->setText(m->getDescription());
     chemin->setText(m->getChemin());
