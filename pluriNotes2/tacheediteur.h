@@ -11,7 +11,9 @@
 #include <QMessageBox>
 #include <QObject>
 #include <QDate>
+#include <QDateEdit>
 #include <QSpinBox>
+#include <QComboBox>
 #include "Note.h"
 #include "noteediteur.h"
 
@@ -23,9 +25,11 @@ private:
     QLabel* act1;
     QLabel* prior;
     QLabel* dateE;
+    QLabel* state;
     QTextEdit* action;
     QSpinBox* priorite;
-    QDate echeance;
+    QDateEdit* echeance;
+    QComboBox* etat;
     void sauvegarde();
 
 public:
@@ -33,6 +37,36 @@ public:
     ~TacheEditeur();
 
 public slots:
+
+    void saveTache(){
+        Tache* t = dynamic_cast<Tache*>(note);
+        t->setAction(action->toPlainText());
+       dynamic_cast<Tache*>(getNote())->setEcheance(echeance->date());
+
+       QDate ddm = QDate::currentDate();
+       t->setDdm(ddm);
+
+       dynamic_cast<Tache*>(getNote())->setPriorite(priorite->value());
+
+
+       Statut s;
+         switch (etat->currentIndex()) {
+            case 1 :
+                s=En_cours;
+                break;
+            case 2 :
+                s=Terminee;
+                break;
+            default:
+                s=En_attente;
+                break;
+            }
+      dynamic_cast<Tache*>(getNote())->setEtat(s);
+
+
+        qDebug()<<"help2";
+        saveNote();
+    }
 
 };
 

@@ -12,6 +12,7 @@
 #include <QObject>
 #include "Note.h"
 #include "noteediteur.h"
+#include "player.h"
 
 
 class MediaEditeur : public NoteEditeur
@@ -19,11 +20,15 @@ class MediaEditeur : public NoteEditeur
 private :
     Q_OBJECT
 
+    friend class AffichageNote;
+
     QLabel* desc;
     QLabel* filepath;
 
     QTextEdit* description;
-    QTextEdit* chemin;
+    QLineEdit* chemin;
+
+    VideoPlayer* player;
 
 
     void sauvegarde();
@@ -32,6 +37,17 @@ private :
 public:
     MediaEditeur(Media* m, QWidget *parent=0);
     ~MediaEditeur();
+
+public slots:
+
+    void saveMedia(){
+        dynamic_cast<Media*>(getNote())->setDescription(description->toPlainText());
+        dynamic_cast<Media*>(getNote())->setFilename(chemin->text());
+        qDebug()<<"help1";
+        saveNote();
+    }
+
+    void openFile(QString f="");
 };
 
 #endif // MEDIAEDITEUR_H

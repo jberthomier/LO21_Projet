@@ -36,8 +36,7 @@ class Note { //Classe abstraite
 
 private:
     QString identificateur;
-    QString titre;
-    QString filename;
+    QString titre;    
     QDate dateCreation;
     QDate dateDerniereModif;
     bool active;
@@ -53,6 +52,7 @@ private:
 
 protected:
     //Méthodes Set en protected afin que seules les classes filles et NoteManager puissent les utiliser
+    QString filename;
     void archiver() { active = false; }
     void restaurer() { active = true; if (corbeille == true) corbeille = false; }
     void jeter() {}
@@ -122,6 +122,7 @@ public:
 class Tache : public Note {
 
     friend class TacheEditeur;
+    friend class PluriNotes;
 
 private :
     Tache();
@@ -134,11 +135,13 @@ private :
     Statut etat;
     //Tache* edit();
 
+protected:
     //Accesseurs en écriture
     void setAction(QString a) { action = a;}
     void setPriorite(unsigned int p) { priorite = p;}
     void setEcheance(QDate d) { echeance = d;}
     void setEtat(Statut e) { etat = e;}
+    void saveNote(QString repertoire) const;
 
 public:
     //Accesseurs en lecture
@@ -156,6 +159,9 @@ public:
 
 class Media : public Note {
 
+    friend class MediaEditeur;
+    friend class PluriNotes;
+
 private :
     Media();
     Media(QString id, const QString& t, QDate dc, QDate ddm,QString f, const QString& d, const QString& c, mType ty) : Note(id,t,dc,ddm,f), description(d), chemin(c), typeMedia(ty) {}
@@ -166,10 +172,12 @@ private :
     mType typeMedia;
     //Media* edit();
 
+protected :
     //Accesseurs en écriture
     void setDescription(QString d) { description = d;}
     void setChemin(QString c) { chemin = c;}
     void setTypeMedia(mType m) { typeMedia = m;}
+    void saveNote(QString repertoire) const;
 
 public :
     //Accesseurs en lecture

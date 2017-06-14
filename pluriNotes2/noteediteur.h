@@ -20,6 +20,10 @@ class NoteEditeur : public QWidget
 private :
     Q_OBJECT
 
+
+
+protected :
+
     QHBoxLayout * cid;
     QHBoxLayout * ctitre;
     QVBoxLayout * couche;
@@ -33,8 +37,6 @@ private :
 
     NoteEditeur(NoteEditeur& );
     NoteEditeur& operator=(NoteEditeur const&);
-
-protected :
     QHBoxLayout *layout;
     Note* getNote() const { return note; }
 

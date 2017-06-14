@@ -20,7 +20,7 @@
       <x>0</x>
       <y>0</y>
       <width>211</width>
-      <height>261</height>
+      <height>201</height>
      </rect>
     </property>
    </widget>
@@ -28,9 +28,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>450</y>
+      <y>400</y>
       <width>211</width>
-      <height>111</height>
+      <height>121</height>
      </rect>
     </property>
    </widget>
@@ -38,10 +38,39 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>260</y>
+      <y>200</y>
       <width>211</width>
-      <height>192</height>
+      <height>201</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Update">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>530</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Actualiser</string>
+    </property>
+   </widget>
+   <widget class="QFrame" name="FrameAffichage">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>0</y>
+      <width>591</width>
+      <height>571</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
     </property>
    </widget>
   </widget>

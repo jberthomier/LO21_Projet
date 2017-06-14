@@ -7,22 +7,22 @@ ArticleEditeur::ArticleEditeur(Article* a, QWidget* parent) : NoteEditeur(a,pare
     text1 = new QLabel("Texte");
     texte = new QTextEdit;
     qDebug()<<"Entree22";
-    layout->addWidget(text1);
+
+
+    getLayout()->addWidget(text1);
     qDebug()<<"Entree22-1";
-    layout->addWidget(texte);
+    getLayout()->addWidget(texte);
     qDebug()<<"Entree23";
     texte->setText(a->getTexte());
     qDebug()<<"Entree24";
     QObject::connect(texte,SIGNAL(textChanged()),this,SLOT(activeSave()));
     qDebug()<<"Entree25";
+    save->setEnabled(false);
+    QObject::connect(titre,SIGNAL(textChanged()),this,SLOT(activeSave()));
+    QObject::connect(save,SIGNAL(clicked()),this,SLOT(saveArticle()));
 }
 
 ArticleEditeur::~ArticleEditeur() {
 
 }
 
-void ArticleEditeur::sauvegarde() {
-    if(dynamic_cast<Article*>(getNote()))
-        qDebug()<<"article";
-    dynamic_cast<Article*>(getNote())->setText(texte->toPlainText());
-}

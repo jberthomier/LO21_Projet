@@ -14,6 +14,7 @@
 #include <QListWidget>
 #include "Note.h"
 #include <QDirIterator>
+#include <QHBoxLayout>
 #include "NoteManager.h"
 #include "ui_PluriNotes.h"
 #include "affichagenote.h"
@@ -31,10 +32,12 @@ private:
     Ui::Plurinotes ui;
 
     QString FilePath;
+    QHBoxLayout* centralLayout;
 
 
 
 public slots :
+
     void ouvrirNote(QListWidgetItem *item);
 
     void newArticle();
@@ -45,6 +48,8 @@ public slots :
     void updateActiveNotes();
     void updateArchiveNotes();
     void updateSortedTasks();
+
+    void load();
 private slots:
 
 };

@@ -25,8 +25,16 @@ private :
 public:
     ArticleEditeur(Article* a, QWidget *parent = 0);
     ~ArticleEditeur();
+    QHBoxLayout* getLayout()const {return layout;}
 
 public slots:
+
+    void saveArticle(){
+        Article* a = dynamic_cast<Article*>(note);
+        a->setText(texte->toPlainText());
+        qDebug()<<"help1";
+        saveNote();
+    }
 
 };
 

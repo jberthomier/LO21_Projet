@@ -1,4 +1,14 @@
-QT += widgets xml core
+
+
+TEMPLATE = app
+TARGET = PluriNotes
+
+QT += core \
+      xml \
+      multimedia \
+      multimediawidgets \
+      widgets \
+      gui
 
 SOURCES += \
     date.cpp \
@@ -12,7 +22,8 @@ SOURCES += \
     articleediteur.cpp \
     noteediteur.cpp \
     tacheediteur.cpp \
-    mediaediteur.cpp
+    mediaediteur.cpp \
+    player.cpp
 
 HEADERS += \
     date.h \
@@ -26,7 +37,8 @@ HEADERS += \
     articleediteur.h \
     noteediteur.h \
     tacheediteur.h \
-    mediaediteur.h
+    mediaediteur.h \
+    player.h
 
 FORMS += \
     plurinotes.ui

@@ -10,10 +10,9 @@ using namespace std;
 int main(int argc, char* argv[]){
 
     //attention maintenant getNote retourne un pointeur sur une note au lieu d'une référence (quelques changements à effectuer
-    //dans le reste des focntions
+    //dans le reste des fonctions
 
-   /* NoteManager& m= NoteManager::getInstance();
-
+   /*
     Article* a1=m.makeArticle();
 
     a1->setText("Je suis un article");
@@ -39,11 +38,29 @@ int main(int argc, char* argv[]){
         }
      }*/
 
+   /* NoteManager& m= NoteManager::getInstance();
+    QDate date = QDate::currentDate();
 
+    Article* a1=m.makeArticle();
 
+    a1->setTitre("Un article");
+    a1->setText("Je suis un article");
+
+    Article* a2=m.makeArticle();
+    m.archiverNote(a2);
+    m.pushToVersions(a2);
+
+    Article* a3=m.makeArticle();
+    m.archiverNote(a3);
+    m.pushToVersions(a3);*/
+
+    qDebug()<<"Test";
     QApplication app(argc, argv);
+    qDebug()<<"Test1";
     PluriNotes p;
+    qDebug()<<"Test2";
     p.show();
+    qDebug()<<"Test3";
     return app.exec();
 
 

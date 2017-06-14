@@ -24,10 +24,12 @@ private:
     QVector<QVector<Note*> > versions;
 
     //Gestion de l'identificateur des versions
-    unsigned int id;
-    unsigned int newId();
+    QString id;
+    QString newId();
 
     QDir directory; //répertoire où sont rangées toutes les notes
+
+    mutable QString filename;
 
 public:
     static NoteManager& getInstance();
@@ -36,10 +38,14 @@ public:
     Tache* makeTache();
     Media* makeMedia();
 
-    Note& getNote(const QString id); //récupérer n'importe quelle note, même archivée ou dans la corbeille
+    Note* getNote(const QString id); //récupérer n'importe quelle note, même archivée ou dans la corbeille
     Note& getNoteActuelle(const QString  id);
     void setDirectory(QString path){directory=path;}
     QString getDirectory(){return directory.path();}
+    void pushToVersions(Note* note);
+
+    QString getFilename() const { return filename; }
+    void setFilename(const QString& f) { filename=f; }
 
     template<typename T> void editNote(const QString  id);
     void restaurerNote(const QString  id);
@@ -52,6 +58,7 @@ public:
     QList<Note*> getActiveNotes(); //retourne la liste des notes actives
     QList<Note*> getArchiveNotes(); //retourne la liste des notes archivées
     QList<Tache*> getSortedTasks();
+    void load();
 };
 
 template<typename T> void NoteManager::editNote(QString  id) {

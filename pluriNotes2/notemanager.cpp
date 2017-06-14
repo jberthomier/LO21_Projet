@@ -2,18 +2,59 @@
 #include "plurinotes.h"
 #include <QFile>
 #include<QDate>
+#include<QString>
+#include<QIODevice>
 
 using namespace std;
 
 NoteManager* NoteManager::instance = NULL;
 
-unsigned int NoteManager::newId() {
-    return id++;
+QString NoteManager::newId() {
+    unsigned int temp = id.toInt();
+    temp+=1;
+    id=QString::number(temp);
+    QFile idfile("id");
+    if(idfile.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)){
+    QTextStream stream(&idfile);
+            stream<<id<<endl;
+            idfile.close();
+
+    }
+
+    return id;
 }
 
-NoteManager::NoteManager() : versions(0), id(0), directory("C:\\Users\\CDespagne\\Desktop\\pluriNotes2") {}
+NoteManager::NoteManager() : versions(0), id("0") {
+
+   QString repertoire= QDir::currentPath(); //le repertoire courant sera le repertoire de l'exécutable
+   qDebug()<<repertoire;
+   directory=repertoire;
+   qDebug()<<"Test1";
+
+   // si un fichier contenant le dernier id existe, alors le télécharger. sinon id vaut juste "0".
+
+   QFile idfile("id");
+   if(idfile.open(QIODevice::ReadWrite)){
+      QString line=idfile.readLine();
+      id = line;
+      idfile.close();
+   }
+   else{
+       qDebug()<<"Test4";
+       char *temp;
+       qDebug()<<"Test5";
+     //id récupère les infos du fichier, et écrase l'initialisation précédente
+       qDebug()<<"Test6";
+       //idfile.QIODevice::readLine(temp, sizeof(buf));
+       qDebug()<<"Test7";
+       //id = temp;
+   }
+   qDebug()<<"Test8";
+
+}
 
 NoteManager::~NoteManager() {
+    //sauvegarder dans un fichier le dernier id utilisé pour le remettre à jour (créer si 'louverture échoue).
     saveAll(); //fonction qui sauve le texte des Notes sur un fichier en mémoire
     versions.clear(); // destruction des vecteurs internes. les destructeurs appelés libèrent la mémoire automatiquement
 }
@@ -27,37 +68,32 @@ NoteManager& NoteManager::getInstance() {
 }
 
 Article* NoteManager::makeArticle() {
-    //QString id = newId();
+    QString id = newId();
     qDebug()<<"Entree1";
-    //QDate date;
     QDate date = QDate::currentDate();
     qDebug()<<"Entree3";
-    Article* a= new Article("","",date,date,"","");
-    QVector<Note*> NewNote;
-    NewNote.push_back(a);
-    versions.push_back(NewNote);
-
+    Article* a= new Article(id,"",date,date,"","");
     return a;
     //
 }
 
 Tache* NoteManager::makeTache() {
     QString id = newId();
-    QDate date;
+    QDate date = QDate::currentDate();
     return new Tache(id,"",date,date,"",0,date,En_cours, "");
 }
 
 Media* NoteManager::makeMedia() {
     QString id = newId();
-    QDate date;
-    return new Media(id,"", date, date,"", "","",image );
+    QDate date = QDate::currentDate();
+    return new Media(id,"", date, date,"", "","",image);
 }
 
-Note& NoteManager::getNote( QString id) {
+Note* NoteManager::getNote( QString id) {
 
     for (QVector<QVector<Note*>>::iterator ite = versions.begin(); ite != versions.end(); ++ite) {
         for (QVector<Note*>::iterator ite2 = (*ite).begin(); ite2 != (*ite).end(); ++ite2) {
-            if ((*ite2)->getId() == id) return **ite2;
+            if ((*ite2)->getId() == id) return *ite2;
         }
     }
     throw NotesException("la note n'existe pas");
@@ -84,7 +120,7 @@ Note& NoteManager::getNoteActuelle( QString  id) { //rechercher la version activ
 }
 
 void NoteManager::restaurerNote( QString  id) {
-        Note* oldNote = &getNote(id);
+        Note* oldNote = getNote(id);
 //test pour vérifier que la note à restaurer n'est pas active. Si elle est déjà active, ne rien faire.
         if (oldNote->isActive()==false && oldNote->inCorbeille()==true) {
             try { // si une version active existe déjà alors il faut l'archiver avant de réactiver l'autre note
@@ -172,6 +208,20 @@ void NoteManager::save(Note* n, QString rep) const {
         a->saveNote(rep);
         qDebug()<<"test13";
      }
+    Tache * t = dynamic_cast<Tache*>(n);
+    if  ( t!=nullptr) //test pour savoir si c'est une tache
+    {
+        qDebug()<<"test5";
+        t->saveNote(rep);
+        qDebug()<<"test13";
+     }
+    Media * m = dynamic_cast<Media*>(n);
+    if  ( m!=nullptr) //test pour savoir si c'est une tache
+    {
+        qDebug()<<"test5";
+        m->saveNote(rep);
+        qDebug()<<"test13";
+     }
 }
 
 void NoteManager::saveAll() const{
@@ -230,4 +280,10 @@ QList<Tache*> NoteManager::getSortedTasks(){
     //tri de la liste result (liste de taches) selon la priorité
     qSort(result);
     return result;
+}
+
+void NoteManager::pushToVersions(Note* note){
+    QVector<Note*> NewNote;
+    NewNote.push_back(note);
+    versions.push_back(NewNote);
 }

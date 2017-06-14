@@ -37,9 +37,10 @@ NoteEditeur::NoteEditeur(Note* n,QWidget *parent) :
 
     this->setLayout(couche);
     //Initialement désactivé
+    id->setDisabled(true);
     save->setEnabled(false);
 
-    QObject::connect(save,SIGNAL(clicked()),this,SLOT(saveNote()));
+    //QObject::connect(save,SIGNAL(clicked()),this,SLOT(saveNote()));
     QObject::connect(titre,SIGNAL(textChanged(QString)),this,SLOT(activeSave()));
     editeurs.push_back(this);
 

@@ -114,6 +114,38 @@ void Media::save(QXmlStreamWriter & stream) const
 }
 
 void Article::saveNote(QString repertoire) const{
+    QDir::setCurrent(repertoire);
+    qDebug()<<"test6";
+    QString filename = this->getTitre()+".xml";
+    qDebug()<<"test7";
+    QFile newfile(filename); //le nom du fichier correspond au titre de la note
+    qDebug()<<"test7-1";
+    if (!newfile.open(QIODevice::WriteOnly | QIODevice::Text))
+           throw NotesException(QString("erreur sauvegarde notes : ouverture fichier xml"));
+       qDebug()<<"test8";
+       QDate ddm = QDate::currentDate();
+       QString dateM = ddm.toString("dd/MM/yyyy");
+       QString dateC = this->getDate().toString("dd/MM/yyyy");
+       QXmlStreamWriter stream(&newfile);
+       stream.setAutoFormatting(true);
+       stream.writeStartDocument();
+       qDebug()<<"test9";
+       stream.writeStartElement("Article");
+       stream.writeTextElement("id",this->getId());       
+       stream.writeTextElement("datecrea", dateC);
+       stream.writeTextElement("datemodif", dateM);
+       stream.writeTextElement("titre",this->getTitre());
+       stream.writeTextElement("text", this->getTexte());
+       stream.writeEndElement();
+       qDebug()<<"test10";
+       stream.writeEndDocument();
+       qDebug()<<"test11";
+       newfile.close();
+       qDebug()<<"test12";
+}
+
+void Tache::saveNote(QString repertoire) const{
+    QDir::setCurrent(repertoire);
     qDebug()<<"test6";
     QString filename = this->getTitre()+".xml";
     qDebug()<<"test7";
@@ -121,14 +153,68 @@ void Article::saveNote(QString repertoire) const{
        if (!newfile.open(QIODevice::WriteOnly | QIODevice::Text))
            throw NotesException(QString("erreur sauvegarde notes : ouverture fichier xml"));
        qDebug()<<"test8";
+
+       QString datecrea = this->getDate().toString("dd/MM/yyyy");
+       QDate ddm = QDate::currentDate();
+       QString dateM = ddm.toString("dd/MM/yyyy");
+       QString echeance = this->getEcheance().toString("dd/MM/yyyy");
+
+       QString e;
+       if (this->getStatut()==En_attente)
+           e="En attente";
+       if (this->getStatut()==En_cours)
+           e="En cours";
+       if (this->getStatut()==Terminee)
+           e="Terminee";
+
+
+       QString priorite = QString::number(this->getPriorite());
+
        QXmlStreamWriter stream(&newfile);
        stream.setAutoFormatting(true);
        stream.writeStartDocument();
        qDebug()<<"test9";
-       stream.writeStartElement("Article");
+       stream.writeStartElement("Tache");
+       stream.writeTextElement("datecrea",datecrea);
+       stream.writeTextElement("datemodif", dateM);
+       stream.writeTextElement("echeance", echeance);
        stream.writeTextElement("id",this->getId());
        stream.writeTextElement("titre",this->getTitre());
-       stream.writeTextElement("text", getTexte());
+       stream.writeTextElement("action", getAction());
+       stream.writeTextElement("etat", e);
+       stream.writeTextElement("priorite",priorite);
+       stream.writeEndElement();
+       qDebug()<<"test10";
+       stream.writeEndDocument();
+       qDebug()<<"test11";
+       newfile.close();
+       qDebug()<<"test12";
+}
+
+void Media::saveNote(QString repertoire) const{
+    QDir::setCurrent(repertoire);
+    qDebug()<<"test6";
+    QString filename = this->getTitre()+".xml";
+    qDebug()<<"test7";
+    QFile newfile(filename); //le nom du fichier correspond au titre de la note
+    qDebug()<<"test7-1";
+    if (!newfile.open(QIODevice::WriteOnly | QIODevice::Text))
+           throw NotesException(QString("erreur sauvegarde notes : ouverture fichier xml"));
+       qDebug()<<"test8";
+       QDate ddm = QDate::currentDate();
+       QString dateM = ddm.toString("dd/MM/yyyy");
+       QString dateC = this->getDate().toString("dd/MM/yyyy");
+       QXmlStreamWriter stream(&newfile);
+       stream.setAutoFormatting(true);
+       stream.writeStartDocument();
+       qDebug()<<"test9";
+       stream.writeStartElement("Media");
+       stream.writeTextElement("id",this->getId());
+       stream.writeTextElement("titre",this->getTitre());
+       stream.writeTextElement("datecrea", dateC);
+       stream.writeTextElement("datemodif", dateM);
+       stream.writeTextElement("description",this->getDescription());
+       stream.writeTextElement("Chemin", this->getFilename());
        stream.writeEndElement();
        qDebug()<<"test10";
        stream.writeEndDocument();
