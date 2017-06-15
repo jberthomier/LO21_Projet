@@ -126,7 +126,7 @@ void Article::saveNote(QString repertoire) const{
        QDate ddm = QDate::currentDate();
        QString dateM = ddm.toString("dd/MM/yyyy");
        QString dateC = this->getDate().toString("dd/MM/yyyy");
-       QXmlStreamWriter stream(&newfile);
+       QXmlStreamWriter stream(&newfile);       
        stream.setAutoFormatting(true);
        stream.writeStartDocument();
        qDebug()<<"test9";
@@ -142,6 +142,7 @@ void Article::saveNote(QString repertoire) const{
        qDebug()<<"test11";
        newfile.close();
        qDebug()<<"test12";
+
 }
 
 void Tache::saveNote(QString repertoire) const{

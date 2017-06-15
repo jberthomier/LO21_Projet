@@ -13,14 +13,21 @@ PluriNotes::PluriNotes(QWidget *parent) : QMainWindow(parent)
     QObject::connect(ui.actionTache, SIGNAL(triggered()), this, SLOT(newTache()));
     QObject::connect(ui.actionMedia, SIGNAL(triggered()), this, SLOT(newMedia()));
     QObject::connect(ui.actionOuvrir, SIGNAL(triggered()), this, SLOT(load()));
-    QObject::connect(ui.Update, SIGNAL(triggered()), this, SLOT(updateActiveNotes()));
-    QObject::connect(ui.Update, SIGNAL(triggered()), this, SLOT(updateArchiveNotes()));
-    QObject::connect(ui.Update, SIGNAL(triggered()), this, SLOT(updateSortedTasks()));
+    QObject::connect(ui.Update, SIGNAL(clicked(bool)), this, SLOT(updateActiveNotes()));
+    QObject::connect(ui.Update, SIGNAL(clicked(bool)), this, SLOT(updateArchiveNotes()));
+    QObject::connect(ui.Update, SIGNAL(clicked(bool)), this, SLOT(updateSortedTasks()));
+
+    QObject::connect(ui.actionNouvelleRelation, SIGNAL(triggered()), this, SLOT(CreationRelation()));
+    QObject::connect(ui.actionParcoursRelation, SIGNAL(triggered()), this, SLOT(ParcoursRelation()));
+    QObject::connect(ui.actionVisualisationRelations, SIGNAL(triggered()), this, SLOT(VisualisationRelation()));
 
     updateActiveNotes(); //création de la liste des notes actives
     updateArchiveNotes(); //création de la liste des notes archivées
     updateSortedTasks(); //création de la liste des taches triées par priorité
+
+
 }
+
 
 PluriNotes::~PluriNotes()
 {
@@ -39,12 +46,12 @@ void PluriNotes::newArticle()
          qDebug()<<"Entree6";
         viewer->show();
         qDebug()<<"Entree6-1";
-        this->updateActiveNotes();
+        /*this->updateActiveNotes();
         qDebug()<<"Test1";
         this->updateArchiveNotes();
         qDebug()<<"Test2";
         this->updateSortedTasks();
-        qDebug()<<"Test3";
+        qDebug()<<"Test3";*/
 }
 
 void PluriNotes::newTache()
@@ -57,7 +64,6 @@ void PluriNotes::newTache()
         viewer->afficheTache(t);
          qDebug()<<"Entree6";
         viewer->show();
-        //ouvrirNote(t);
 }
 
 void PluriNotes::newMedia()
@@ -70,7 +76,6 @@ void PluriNotes::newMedia()
         viewer->afficheMedia(med);
          qDebug()<<"Entree6";
         viewer->show();
-        //ouvrirNote(med);
 }
 
 void PluriNotes::getChemin (QListWidgetItem* id) {
@@ -84,12 +89,14 @@ void PluriNotes::getChemin (QListWidgetItem* id) {
 
 void PluriNotes::updateActiveNotes(){
     QList<Note*> notes = NoteManager::getInstance().getActiveNotes();
+    ui.noteList->clear();
     for(auto ite = notes.begin(); ite != notes.end(); ++ite) {
         ui.noteList->addItem((*ite)->getId());
     }
 }
 void PluriNotes::updateArchiveNotes(){
     QList<Note*> notes = NoteManager::getInstance().getArchiveNotes();
+    ui.archiveList->clear();
     for(auto ite = notes.begin(); ite != notes.end(); ++ite) {
         ui.archiveList->addItem((*ite)->getId());
     }
@@ -97,9 +104,10 @@ void PluriNotes::updateArchiveNotes(){
 
 void PluriNotes::updateSortedTasks(){ //veut-on aussi afficher la date et la priorité avec la tache ?
     QList<Tache*> notes = NoteManager::getInstance().getSortedTasks();
+    ui.taskList->clear();
     for(auto ite = notes.begin(); ite != notes.end(); ++ite) {
         ui.taskList->addItem((*ite)->getId());
-    }
+     }
 }
 
 
@@ -335,4 +343,128 @@ void PluriNotes::load() {
     // Removes any device() or data from the reader * and resets its internal state to the initial state.
     xml.clear();
     qDebug()<<"fin load\n";
+}
+
+void PluriNotes::CreationRelation(){
+    RelationEditeur* window = new RelationEditeur;
+    window->show();
+}
+
+void PluriNotes::ParcoursRelation(){
+
+    window_exploration = new ExplorationRelations;
+    QObject::connect(window_exploration->getListe(), SIGNAL(doubleClicked(QModelIndex)), this, SLOT(OuvrirRelation()));
+
+   window_exploration->show();
+}
+
+void PluriNotes::OuvrirRelation(){
+    if(window_exploration->getListe()->currentRow() != -1){
+        QString titre_rela = window_exploration->getListe()->currentItem()->text();
+
+        RelationManager& rm = RelationManager::getInstance();
+
+        window_relation = new RelationEditeur(&rm.getRelation(titre_rela), this);
+
+        QObject::connect(window_relation->getButtonCreate(), SIGNAL(clicked(bool)), this, SLOT(OuvertureCouple()));
+
+        QObject::connect(window_relation->getButtonClose(), SIGNAL(clicked(bool)), this, SLOT(ParcoursRelation()));
+
+
+        window_relation->show();
+    }
+}
+
+void PluriNotes::OuvertureCouple(){
+    if(window_exploration->getListe()->currentRow() != -1){
+
+        RelationManager& rm = RelationManager::getInstance();
+
+        Relation* r = &rm.getRelation( window_relation->getTitre()->text() );
+
+        window_couple = new FenetreCouple(r, this);
+        //connect(window_couple->getButtonCreate(), SIGNAL(clicked(bool)), this, SLOT(ouvrir_arbo()));
+        window_couple->show();
+    }
+
+
+}
+
+void PluriNotes::VisualisationRelation(){
+
+
+    window_voir = new VoirRelations(this);
+    //connect(window_voir->getButtonDeletion(), SIGNAL(clicked(bool)), this, SLOT(ouvrir_arbo()));
+
+    window_voir->show();
+
+}
+
+void PluriNotes::ouvre_note_asc() {
+    if(arbo->getAscendants()->currentColumn() != -1){
+
+        NoteManager& m = NoteManager::getInstance();
+
+        Note* note = m.getNote( arbo->getAscendants()->currentItem()->text(0) );
+
+        if(note->getType()=="article")
+            ArticleEditeur* edit = ArticleEditeur(note);
+        else if(note->getType()=="tache")
+            TacheEditeur* edit = TacheEditeur(note);
+        else
+            MediaEditeur* edit = MediaEditeur(note);
+       edit->show();
+       ouvrir_arbo();
+    }
+
+}
+
+void PluriNotes::ouvre_note_desc() {
+    if(arbo->getDescendants()->currentColumn() != -1){
+
+        NoteManager& m = NoteManager::getInstance();
+
+        Note* note = m.getNote( arbo->getDescendants()->currentItem()->text(0) );
+
+
+        if(note->getType()=="article")
+            ArticleEditeur* edit = ArticleEditeur(note);
+        else if(note->getType()=="tache")
+            TacheEditeur* edit = TacheEditeur(note);
+        else
+            MediaEditeur* edit = MediaEditeur(note);
+       edit->show();
+        ouvrir_arbo();
+    }
+
+}
+
+void PluriNotes::ouvrir_arbo(){
+    if(arbo && arbo->getButtonAsc()->hasFocus() && arbo->getAscendants()->currentColumn() != -1 ){
+        NoteManager& m = NoteManager::getInstance();
+
+        Note* note = m.getNote( arbo->getAscendants()->currentItem()->text(0) );
+        arbo->close();
+        arbo = new Arborescence(*note, this);
+        connect(arbo->getButtonAsc(), SIGNAL(clicked(bool)), this, SLOT(ouvre_note_asc()));
+        connect(arbo->getButtonDesc(), SIGNAL(clicked(bool)), this, SLOT(ouvre_note_desc()));
+        arbo->show();
+
+    }
+    else if (arbo && arbo->getButtonDesc()->hasFocus() && arbo->getDescendants()->currentColumn() != -1 ){
+        NoteManager& m = NoteManager::getInstance();
+
+        Note* note = m.getNote( arbo->getDescendants()->currentItem()->text(0) );
+        arbo->close();
+        arbo = new Arborescence(*note, this);
+        connect(arbo->getButtonAsc(), SIGNAL(clicked(bool)), this, SLOT(ouvre_note_asc()));
+        connect(arbo->getButtonDesc(), SIGNAL(clicked(bool)), this, SLOT(ouvre_note_desc()));
+        arbo->show();
+
+
+    }
+    else{
+        if(arbo) arbo->close();
+
+}
 }

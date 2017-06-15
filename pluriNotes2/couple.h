@@ -11,6 +11,7 @@ private:
     QString label;
     const Note& noteSource;
     const Note& noteDestination;
+
     Relation** relations;
     unsigned int nbRelations;
     unsigned int nbMaxRelations;
@@ -20,12 +21,13 @@ private:
     void removeRelation(Relation* r);
 
     //méthodes amies
-    friend void Relation::addCouple(const Note& ns, const Note& nd);
+    friend void Relation::addCouple(const Note& ns, const Note& nd,QString l);
     friend void Relation::removeCouple(Couple& c);
 
 public:
     //constructeur
     Couple(const QString& l, const Note& n1, const Note& n2): label(l), noteSource(n1), noteDestination(n2){}
+    //Couple(const QString& l,QString& n1, QString& n2): label(l), source(n1), destination(n2){}
 
     //accesseurs en lecture
     const QString getLabel() const {return label;}
@@ -63,7 +65,7 @@ private:
     void deleteCouple(Couple& c);
 
     //méthodes amies
-    friend void Relation::addCouple(const Note& ns, const Note& nd);
+    friend void Relation::addCouple(const Note& ns, const Note& nd,QString l);
     friend void Relation::removeCouple(Couple& c);
 
 public:

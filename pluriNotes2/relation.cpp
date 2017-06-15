@@ -18,7 +18,17 @@ void Relation::getCouples() const {
     }
 }
 
-void Relation::addCouple(const Note& ns, const Note& nd){
+Couple Relation::getCouples(QString x, QString y) const {
+    for (unsigned int i=0; i<nbCouples; i++){
+        qDebug()<<"Label: "<<couples[i]->getLabel();
+        QString t1 = couples[i]->getNoteSource().getTitre();
+        QString t2 = couples[i]->getNoteDestination().getTitre();
+        if (t1==x && t2 == y) return *couples[i];
+            }
+       throw NotesException(QString("Erreur, la relation n'existe pas."));
+}
+
+void Relation::addCouple(const Note& ns, const Note& nd, QString label){
     for (unsigned int i=0; i<nbCouples; i++){
         if (couples[i]->getNoteSource().getTitre()==ns.getTitre() && couples[i]->getNoteDestination().getTitre()==nd.getTitre()){
             throw NotesException("Erreur: la relation entre ces deux notes existe déjà existe déjà.");
@@ -43,7 +53,7 @@ void Relation::addCouple(const Note& ns, const Note& nd){
         }
     }
     if (res) couples[nbCouples]=&CoupleManager::instance->getCouple(ns,nd);
-    else couples[nbCouples]=&CoupleManager::instance->getNewCouple("", ns, nd);
+    else couples[nbCouples]=&CoupleManager::instance->getNewCouple(label, ns, nd);
     nbCouples++;
     couples[nbCouples]->addRelation(this);
 }
@@ -62,6 +72,8 @@ void Relation::removeCouple(Couple& c){
         CoupleManager::instance->deleteCouple(c);
     }
 }
+
+
 
 //méthodes privées classe RelationManager
 
@@ -124,19 +136,29 @@ void RelationManager::deleteRelation(Relation& r){
     }
 }
 
-const Relation& RelationManager::getNewRelation(const QString& t){
+Relation &RelationManager::getNewRelation(const QString& t){
     Relation* r=new Relation(t,"");
     addRelation(r);
     return *r;
 }
 
-const Relation& RelationManager::getRelation(const QString& t) const{
+Relation& RelationManager::getRelation(const QString &t)const {
     for (unsigned int i=0; i<nbRelations; i++){
         if (relations[i]->getTitre()==t){
             return *relations[i];
         }
     }
     throw NotesException("Erreur: il n'existe pas de relation avec ce titre.");
+}
+
+bool RelationManager::existRelation(const QString &t) const{
+    for (unsigned int i=0; i<nbRelations; i++){
+        if (relations[i]->getTitre()==t){
+            return true;
+        }
+
+}
+    return false;
 }
 
 void RelationManager::visualiserRelation(const Relation& r)const{

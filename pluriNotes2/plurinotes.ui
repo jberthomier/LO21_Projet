@@ -98,15 +98,16 @@
     <addaction name="menuNouveau"/>
     <addaction name="separator"/>
     <addaction name="actionOuvrir"/>
-    <addaction name="actionSauver"/>
-    <addaction name="actionQuitter"/>
+    <addaction name="actionSupprimer"/>
+    <addaction name="actionQuitter_2"/>
    </widget>
    <widget class="QMenu" name="menuEdition">
     <property name="title">
-     <string>Edition</string>
+     <string>Relation</string>
     </property>
-    <addaction name="actionAnnuler_Ctrl_Z"/>
-    <addaction name="actionR_tablir_Ctrl_Y"/>
+    <addaction name="actionNouvelleRelation"/>
+    <addaction name="actionParcoursRelation"/>
+    <addaction name="actionVisualisationRelations"/>
    </widget>
    <addaction name="menuFichier"/>
    <addaction name="menuEdition"/>
@@ -150,6 +151,31 @@
   <action name="actionQuitter">
    <property name="text">
     <string>Quitter</string>
+   </property>
+  </action>
+  <action name="actionNouvelleRelation">
+   <property name="text">
+    <string>Nouvelle Relation</string>
+   </property>
+  </action>
+  <action name="actionParcoursRelation">
+   <property name="text">
+    <string>Parcourir les relations</string>
+   </property>
+  </action>
+  <action name="actionSupprimer">
+   <property name="text">
+    <string>Supprimer</string>
+   </property>
+  </action>
+  <action name="actionQuitter_2">
+   <property name="text">
+    <string>Quitter</string>
+   </property>
+  </action>
+  <action name="actionVisualisationRelations">
+   <property name="text">
+    <string>Visualiser les relations</string>
    </property>
   </action>
  </widget>

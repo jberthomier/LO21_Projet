@@ -17,8 +17,8 @@ private:
     /*Déclaration des constructeurs, opérateurs de recopie et d'affectation afin d'empêcher la création d'une deuxième instance par l'utilisateur.*/
     NoteManager();
     ~NoteManager();
-    NoteManager(const NoteManager& nm);
-    NoteManager& operator=(const NoteManager& nm);
+    NoteManager(const NoteManager& m);
+    NoteManager& operator=(const NoteManager& m);
 
     //Stockage des versions
     QVector<QVector<Note*> > versions;
@@ -37,6 +37,8 @@ public:
     Article* makeArticle();
     Tache* makeTache();
     Media* makeMedia();
+
+    void setNoteId(Note* note, QString id){note->setId(id);}
 
     Note* getNote(const QString id); //récupérer n'importe quelle note, même archivée ou dans la corbeille
     Note& getNoteActuelle(const QString  id);
@@ -59,6 +61,8 @@ public:
     QList<Note*> getArchiveNotes(); //retourne la liste des notes archivées
     QList<Tache*> getSortedTasks();
     void load();
+
+    QVector<Note*> NoteManager::getVector(QString id);
 };
 
 template<typename T> void NoteManager::editNote(QString  id) {

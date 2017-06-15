@@ -48,7 +48,11 @@ private:
 
     friend class NoteManager;
     friend class NoteEditeur;
+    friend class FenetreCouple;
+    friend class VoirRelations;
+    friend class Arborescence;
 
+    void setId(QString id) {identificateur=id;}
 
 protected:
     //Méthodes Set en protected afin que seules les classes filles et NoteManager puissent les utiliser
@@ -61,7 +65,7 @@ protected:
 public :
     //Constructeurs et destructeur
     Note();
-    Note (QString id, const QString& t, QDate dc, QDate ddm,QString f) : identificateur(id),titre(t), dateCreation(dc), dateDerniereModif(ddm),filename(f), active(false), corbeille(false) {}
+    Note (QString id, const QString& t, QDate dc, QDate ddm,QString f) : identificateur(id),titre(t), dateCreation(dc), dateDerniereModif(ddm),filename(f), active(true), corbeille(false) {}
     Note(const Note& n) : identificateur(n.identificateur), titre(n.titre), dateCreation(n.dateCreation), dateDerniereModif(n.dateDerniereModif), active(n.active), corbeille(n.corbeille) {}
     Note& operator=(Note const& note);
 

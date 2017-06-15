@@ -23,7 +23,9 @@ SOURCES += \
     noteediteur.cpp \
     tacheediteur.cpp \
     mediaediteur.cpp \
-    player.cpp
+    player.cpp \
+    relationediteur.cpp \
+    arborescence.cpp
 
 HEADERS += \
     date.h \
@@ -38,7 +40,9 @@ HEADERS += \
     noteediteur.h \
     tacheediteur.h \
     mediaediteur.h \
-    player.h
+    player.h \
+    relationediteur.h \
+    arborescence.h
 
 FORMS += \
     plurinotes.ui

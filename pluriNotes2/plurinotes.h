@@ -18,6 +18,8 @@
 #include "NoteManager.h"
 #include "ui_PluriNotes.h"
 #include "affichagenote.h"
+#include "relationediteur.h"
+#include "arborescence.h"
 
 
 class PluriNotes : public QMainWindow
@@ -27,14 +29,19 @@ class PluriNotes : public QMainWindow
 public:
     PluriNotes(QWidget *parent = 0);
     virtual ~PluriNotes();
+    void loadSettings();
 
 private:
     Ui::Plurinotes ui;
 
     QString FilePath;
     QHBoxLayout* centralLayout;
-
-
+    QString m_sSettingsFile;
+    ExplorationRelations* window_exploration;
+    RelationEditeur* window_relation;
+    FenetreCouple* window_couple;
+    VoirRelations* window_voir;
+    Arborescence * arbo;
 
 public slots :
 
@@ -48,6 +55,17 @@ public slots :
     void updateActiveNotes();
     void updateArchiveNotes();
     void updateSortedTasks();
+
+    void CreationRelation();
+    void ParcoursRelation();
+    void OuvertureCouple();
+    void VisualisationRelation();
+
+    void OuvrirRelation();
+
+    void ouvrir_arbo();
+    void ouvre_note_desc();
+    void ouvre_note_asc();
 
     void load();
 private slots:

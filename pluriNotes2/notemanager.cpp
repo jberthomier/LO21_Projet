@@ -26,30 +26,200 @@ QString NoteManager::newId() {
 
 NoteManager::NoteManager() : versions(0), id("0") {
 
-   QString repertoire= QDir::currentPath(); //le repertoire courant sera le repertoire de l'exécutable
+   //le repertoire courant sera le repertoire de l'exécutable
+   QString repertoire= QDir::currentPath();
    qDebug()<<repertoire;
    directory=repertoire;
    qDebug()<<"Test1";
 
    // si un fichier contenant le dernier id existe, alors le télécharger. sinon id vaut juste "0".
-
    QFile idfile("id");
    if(idfile.open(QIODevice::ReadWrite)){
       QString line=idfile.readLine();
       id = line;
       idfile.close();
    }
-   else{
-       qDebug()<<"Test4";
-       char *temp;
-       qDebug()<<"Test5";
-     //id récupère les infos du fichier, et écrase l'initialisation précédente
-       qDebug()<<"Test6";
-       //idfile.QIODevice::readLine(temp, sizeof(buf));
-       qDebug()<<"Test7";
-       //id = temp;
+   //si des notes ont été sauvegardées sur fichier, on les recréer et on les range dans le vecteur
+   // (mais il ne récupèrera d'une session à l'autre que les notes actives)
+    QStringList filter;
+    filter<<"*.xml";
+   QFileInfoList noteList = directory.entryInfoList(filter,QDir::Files);
+   qDebug()<<"Liste ?";
+   for (auto ite=noteList.begin(); ite!=noteList.end(); ++ite){
+       qDebug()<<"sdqhdf";
+       QString name = (*ite).fileName();
+       QFile file(name);
+       qDebug()<<name;
+       if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+           throw NotesException("Erreur ouverture fichier notes");
+       }
+       QXmlStreamReader xml(&file);
+       while(!xml.atEnd() && !xml.hasError()) {
+           QXmlStreamReader::TokenType token = xml.readNext();
+           if(token == QXmlStreamReader::StartDocument) continue;
+           if(token == QXmlStreamReader::StartElement) {
+               if(xml.name() == "notes") continue;
+               if(xml.name() == "Article") {
+                   QString identificateur;
+                   QString titre;
+                   QString text;
+                   QXmlStreamAttributes attributes = xml.attributes();
+                   xml.readNext();
+                   while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "Article")) {
+                       if(xml.tokenType() == QXmlStreamReader::StartElement) {
+
+                           if(xml.name() == "id") {
+                               xml.readNext(); identificateur=xml.text().toString();
+                           }
+
+                           if(xml.name() == "titre") {
+                               xml.readNext(); titre=xml.text().toString();
+                           }
+
+                           if(xml.name() == "text") {
+                               xml.readNext();
+                               text=xml.text().toString();
+                           }
+                       }
+
+                       xml.readNext();
+                   }
+                   // 3) Génération de l'objet à partir du fichier xml
+                   Article* a=makeArticle();
+                   setNoteId(a,identificateur); //corriger l'incrémentation de l'id réalisée par le makeArticle
+                   a->setFilename(titre);
+                   a->setText(text);
+                   a->setTitre(titre);
+                   pushToVersions(a);
+               }
+
+               if(xml.name() == "Tache") {
+                   qDebug()<<"new tache\n";
+                   QString identificateur;
+                   QString titre;
+                   QString action;
+                   QString echeance;
+                   QString etat;
+                   QString priorite;
+                   QXmlStreamAttributes attributes = xml.attributes();
+                   xml.readNext();
+                   while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "Tache")) {
+                       if(xml.tokenType() == QXmlStreamReader::StartElement) {
+                           if(xml.name() == "id") {
+                               xml.readNext();
+                               identificateur=xml.text().toString();
+                               qDebug()<<"id="<<identificateur<<"\n";
+                           }
+
+                           if(xml.name() == "titre") {
+                               xml.readNext();
+                               titre=xml.text().toString();
+                               qDebug()<<"titre="<<titre<<"\n";
+                           }
+
+                           if(xml.name() == "action") {
+                               xml.readNext();
+                               action=xml.text().toString();
+                               qDebug()<<"action="<<action<<"\n";
+                           }
+                           if(xml.name() == "echeance") {
+                               xml.readNext();
+                               echeance=xml.text().toString();
+                               qDebug()<<"echeance="<<echeance<<"\n";
+                           }
+                           if(xml.name() == "etat") {
+                               xml.readNext();
+                               etat=xml.text().toString();
+                               qDebug()<<"etat="<<etat<<"\n";
+                           }
+                           if(xml.name() == "priorite") {
+                               xml.readNext();
+                               priorite=xml.text().toString();
+                               qDebug()<<"priorite="<<priorite<<"\n";
+                           }
+
+                           qDebug()<<"HEY10";
+                       }
+                       // ...and next...
+                       xml.readNext();
+                       qDebug()<<"HEY11";
+                   }
+                   qDebug()<<"ajout note "<<identificateur<<"\n";
+                   Tache* t=makeTache();
+                   Statut e;
+                   if (etat=="En attente")
+                       e=En_attente;
+                   if (etat=="En cours")
+                       e=En_cours;
+                   if (etat=="Terminee")
+                       e=Terminee;
+                   QDate DateE = QDate::fromString(echeance,"dd/MM/yyyy");
+                   qDebug()<<DateE;
+                   unsigned int p= priorite.toInt();
+
+                   t->setFilename(titre);
+                   qDebug()<<t->filename;
+                   t->setTitre(titre);
+                   t->setAction(action);
+                   qDebug()<<t->action;
+                   t->setEtat(e);
+                   qDebug()<<t->etat;
+                   t->setEcheance(DateE);
+                   qDebug()<<t->echeance;
+                   t->setPriorite(p);
+                   qDebug()<<t->priorite;
+                   pushToVersions(t);
+               }
+               if(xml.name() == "Media") {
+                   qDebug()<<"new media\n";
+                   QString identificateur;
+                   QString titre;
+                   QString description;
+                   QString chemin;
+                   QXmlStreamAttributes attributes = xml.attributes();
+                   xml.readNext();
+                   while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "Media")) {
+                       if(xml.tokenType() == QXmlStreamReader::StartElement) {
+                           if(xml.name() == "id") {
+                               xml.readNext(); identificateur=xml.text().toString();
+                               qDebug()<<"id="<<identificateur<<"\n";
+                           }
+
+                           if(xml.name() == "titre") {
+                               xml.readNext(); titre=xml.text().toString();
+                               qDebug()<<"titre="<<titre<<"\n";
+                           }
+
+                           if(xml.name() == "description") {
+                               xml.readNext();
+                               description=xml.text().toString();
+                               qDebug()<<"description="<<description<<"\n";
+                           }
+                           if(xml.name() == "Chemin") {
+                               xml.readNext();
+                               chemin=xml.text().toString();
+                               qDebug()<<"chemin="<<chemin<<"\n";
+                           }
+                           qDebug()<<"HEY10";
+                       }
+                       xml.readNext();
+                       qDebug()<<"HEY11";
+                   }
+                   qDebug()<<"ajout note "<<identificateur<<"\n";
+                   Media* med=makeMedia();
+                   med->setFilename(titre);
+                   med->setTitre(titre);
+                   med->setDescription(description);
+                   med->setChemin(chemin);
+                   pushToVersions(med);
+               }
+           }
+       }
+       if(xml.hasError()) {
+           throw NotesException("Erreur lecteur fichier notes, parser xml");
+       }
+       xml.clear();
    }
-   qDebug()<<"Test8";
 
 }
 
@@ -97,6 +267,21 @@ Note* NoteManager::getNote( QString id) {
         }
     }
     throw NotesException("la note n'existe pas");
+}
+
+QVector<Note*> NoteManager::getVector(QString id){ //renvoie le vector où se trouve la note
+    int position = -1;
+    QVector<Note*> v;
+    for (QVector<QVector<Note*>>::iterator ite = versions.begin(); ite != versions.end(); ++ite) {
+        for (QVector<Note*>::iterator ite2 = (*ite).begin(); ite2 != (*ite).end(); ++ite2) {
+            if ((*ite2)->getId() == id) {
+                position = 0;
+                v = *ite;
+                break;
+            }
+        }
+    }
+    return v;
 }
 
 Note& NoteManager::getNoteActuelle( QString  id) { //rechercher la version active de la note correspondant à l'id

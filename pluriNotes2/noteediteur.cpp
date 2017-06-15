@@ -20,6 +20,9 @@ NoteEditeur::NoteEditeur(Note* n,QWidget *parent) :
     ctitre = new QHBoxLayout;
     couche = new QVBoxLayout;
 
+
+
+
     cid->addWidget(id1);
     cid->addWidget(id);
     ctitre->addWidget(titre1);
