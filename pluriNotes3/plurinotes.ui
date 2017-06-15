@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Plurinotes</class>
+ <widget class="QMainWindow" name="Plurinotes">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QListWidget" name="noteList">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>211</width>
+      <height>201</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="archiveList">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>400</y>
+      <width>211</width>
+      <height>121</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="taskList">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>200</y>
+      <width>211</width>
+      <height>201</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Update">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>530</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Actualiser</string>
+    </property>
+   </widget>
+   <widget class="QFrame" name="FrameAffichage">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>0</y>
+      <width>591</width>
+      <height>571</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFichier">
+    <property name="title">
+     <string>Fichier</string>
+    </property>
+    <widget class="QMenu" name="menuNouveau">
+     <property name="title">
+      <string>Nouveau</string>
+     </property>
+     <addaction name="actionArticle"/>
+     <addaction name="actionTache"/>
+     <addaction name="actionMedia"/>
+    </widget>
+    <addaction name="menuNouveau"/>
+    <addaction name="separator"/>
+    <addaction name="actionOuvrir"/>
+    <addaction name="actionSupprimer"/>
+    <addaction name="actionQuitter_2"/>
+   </widget>
+   <widget class="QMenu" name="menuEdition">
+    <property name="title">
+     <string>Relation</string>
+    </property>
+    <addaction name="actionNouvelleRelation"/>
+    <addaction name="actionParcoursRelation"/>
+    <addaction name="actionVisualisationRelations"/>
+   </widget>
+   <addaction name="menuFichier"/>
+   <addaction name="menuEdition"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionOuvrir">
+   <property name="text">
+    <string>Ouvrir</string>
+   </property>
+  </action>
+  <action name="actionArticle">
+   <property name="text">
+    <string>Article</string>
+   </property>
+  </action>
+  <action name="actionTache">
+   <property name="text">
+    <string>Tache</string>
+   </property>
+  </action>
+  <action name="actionMedia">
+   <property name="text">
+    <string>Media</string>
+   </property>
+  </action>
+  <action name="actionAnnuler_Ctrl_Z">
+   <property name="text">
+    <string>Annuler (Ctrl+Z)</string>
+   </property>
+  </action>
+  <action name="actionR_tablir_Ctrl_Y">
+   <property name="text">
+    <string>Rétablir (Ctrl+Y)</string>
+   </property>
+  </action>
+  <action name="actionSauver">
+   <property name="text">
+    <string>Sauver</string>
+   </property>
+  </action>
+  <action name="actionQuitter">
+   <property name="text">
+    <string>Quitter</string>
+   </property>
+  </action>
+  <action name="actionNouvelleRelation">
+   <property name="text">
+    <string>Nouvelle Relation</string>
+   </property>
+  </action>
+  <action name="actionParcoursRelation">
+   <property name="text">
+    <string>Parcourir les relations</string>
+   </property>
+  </action>
+  <action name="actionSupprimer">
+   <property name="text">
+    <string>Supprimer</string>
+   </property>
+  </action>
+  <action name="actionQuitter_2">
+   <property name="text">
+    <string>Quitter</string>
+   </property>
+  </action>
+  <action name="actionVisualisationRelations">
+   <property name="text">
+    <string>Visualiser les relations</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionArticle</sender>
+   <signal>triggered()</signal>
+   <receiver>Plurinotes</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
