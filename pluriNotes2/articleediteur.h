@@ -10,6 +10,7 @@
 #include <QHBoxLayout>
 #include <QMessageBox>
 #include <QObject>
+
 #include "Note.h"
 #include "noteediteur.h"
 
@@ -18,23 +19,31 @@ class ArticleEditeur : public NoteEditeur
 private :
     Q_OBJECT
 
+	//Attributs
     QLabel* text1;
     QTextEdit* texte;
+	
+	//Méthode
     void sauvegarde();
 
 public:
+
+	//Constructeur et destructeur
     ArticleEditeur(Article* a, QWidget *parent = 0);
     ~ArticleEditeur();
-    QHBoxLayout* getLayout()const {return layout;}
+	
+	//Accessseur en lecture
+	QHBoxLayout* getLayout()const {return layout;}
 
 public slots:
 
-    void saveArticle(){
-        Article* a = dynamic_cast<Article*>(note);
-        a->setText(texte->toPlainText());
-        qDebug()<<"help1";
-        saveNote();
-    }
+	//Méthode
+	void saveArticle(){
+		Article* a = dynamic_cast<Article*>(note);
+		a->setText(texte->toPlainText());
+		qDebug()<<"help1";
+		saveNote();
+	}
 
 };
 

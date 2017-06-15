@@ -1,5 +1,6 @@
 #include "articleediteur.h"
 
+/*------------------------------------------------------Constructeur et destructeur-------------------------------------------------------*/
 
 ArticleEditeur::ArticleEditeur(Article* a, QWidget* parent) : NoteEditeur(a,parent)
 {
@@ -7,7 +8,6 @@ ArticleEditeur::ArticleEditeur(Article* a, QWidget* parent) : NoteEditeur(a,pare
     text1 = new QLabel("Texte");
     texte = new QTextEdit;
     qDebug()<<"Entree22";
-
 
     getLayout()->addWidget(text1);
     qDebug()<<"Entree22-1";
@@ -25,4 +25,3 @@ ArticleEditeur::ArticleEditeur(Article* a, QWidget* parent) : NoteEditeur(a,pare
 ArticleEditeur::~ArticleEditeur() {
 
 }
-
