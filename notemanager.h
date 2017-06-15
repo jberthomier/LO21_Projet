@@ -109,7 +109,7 @@ public:
      */
 	QString getFilename() const { return filename; }
 	
-	QVector<Note*> NoteManager::getVector(QString id);
+	QVector<Note*> getVector(QString id);
 	
 	//Accesseurs en écriture
 	/**
