@@ -1,6 +1,6 @@
 #include "couple.h"
 
-//méthodes class Couple
+/*------------------------------------------------------Méthodes de la classe Couple-------------------------------------------------------*/
 
 void Couple::addRelation(Relation* r){
     for (unsigned int i=0; i<nbRelations; i++){
@@ -35,7 +35,7 @@ void Couple::removeRelation(Relation* r){
     }
 }
 
-//méthodes privées class CoupleManager
+/*------------------------------------------------------Méthodes privées de la classe CoupleManager-------------------------------------------------------*/
 
 CoupleManager* CoupleManager::instance=0;
 
@@ -82,7 +82,7 @@ void CoupleManager::deleteCouple(Couple& c){
     }
 }
 
-//méthodes publiques class CoupleManager
+/*------------------------------------------------------Méthodes publiques de la classe CoupleManager-------------------------------------------------------*/
 
 CoupleManager& CoupleManager::getInstance(){
     if (instance==nullptr) {
