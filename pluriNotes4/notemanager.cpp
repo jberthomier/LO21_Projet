@@ -344,20 +344,25 @@ Article* NoteManager::makeArticle() {
     QDate date = QDate::currentDate();
     qDebug()<<"Entree3";
     Article* a= new Article(id,"",date,date,"");
+    pushToVersions(a);
     return a;
     //
 }
 
 Tache* NoteManager::makeTache() {
     QString id = newId();
-    QDate date = QDate::currentDate();
-    return new Tache(id,"",date,date,0,date,En_cours, "");
+    QDate date = QDate::currentDate(); 
+    Tache* t= new Tache(id,"",date,date,0,date,En_cours, "");
+    pushToVersions(t);
+    return t;
 }
 
 Media* NoteManager::makeMedia() {
     QString id = newId();
     QDate date = QDate::currentDate();
-    return new Media(id,"", date, date,"", "",image);
+    Media* med = new Media(id,"", date, date,"", "",image);
+    pushToVersions(med);
+    return med;
 }
 
 /**
