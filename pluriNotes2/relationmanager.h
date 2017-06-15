@@ -1,54 +1,50 @@
 #ifndef RELATIONMANAGER_H
 #define RELATIONMANAGER_H
 
-#include <QDir>
-#include "relation.h"
-
-
 class Relation;
 
 class RelationManager {
 
-    friend class RelationEditeur;
-
 private:
-    //attributs
+    //Attributs
     static RelationManager* instance;
     Relation** relations;
     unsigned int nbRelations;
     unsigned int nbMaxRelations;
     QDir directory;
-
-    //constructeurs, destructeur et opérateur d'affectation
+	
+    //Constructeurs, destructeur et opérateur d'affectation
     RelationManager();
     RelationManager(const RelationManager& rm); //ne pas implémenter pour ne pas avoir de copies du singleton
     virtual ~RelationManager();
     void operator=(const RelationManager& rm); //ne pas implémenter pour ne pas avoir de copies du singleton
 
-    //méthodes
+    //Méthodes
     void addRelation (Relation* r); //ajouter une relation a au tableau des relations
 
 public:
+
     static RelationManager& getInstance(); //creer un instance unique RelationManager
     static void freeInstance(); //liberer l'instance RelationManager
     void deleteRelation(Relation& r); //supprimer une relation
-    Relation& getNewRelation(const QString& t); //creer une nouvelle relation
+    const Relation& getNewRelation(const QString& t); //creer une nouvelle relation
 
-    //accesseur en lecture
-    Relation& getRelation(const QString& t)const; //recuperer une relation a l'aide de son titre
-
-    //visualisation
+    //Accesseur en lecture
+    const Relation& getRelation(const QString& t)const; //recuperer une relation a l'aide de son titre
+	QDir getDirectory() const {return directory;}
+	
+	//Accesseur en écriture
+    void setDirectory(const QString d) { directory = d;}
+	
+    //Visualisation
     void visualiserRelation(const Relation& r)const;
 
-    //pour savoir si une note est référencé
+    //Pour savoir si une note est référencé
     bool noteReference(const Note& n, const QString& t);
 
-    QDir getDirectory() const {return directory;}
-    void setDirectory(const QString d) { directory = d;}
-
-    bool existRelation(const QString& t) const;
-
-    class Iterator {
+	bool existRelation(const QString& t) const;
+	
+	class Iterator {
         public:
             Relation* operator *(){return *current;}
 
@@ -76,6 +72,7 @@ public:
     Iterator getIterator() {
             return Iterator(relations, nbRelations);
    }
+   
 };
 
 #endif // RELATIONMANAGER_H

@@ -1,6 +1,6 @@
 #include "couple.h"
 
-//méthodes classe Relation
+/*------------------------------------------------------Méthodes de la classe Relation-------------------------------------------------------*/
 
 Relation::~Relation(){
     for (unsigned int i=0; i<nbCouples; i++){
@@ -28,7 +28,7 @@ Couple Relation::getCouples(QString x, QString y) const {
        throw NotesException(QString("Erreur, la relation n'existe pas."));
 }
 
-void Relation::addCouple(const Note& ns, const Note& nd, QString label){
+void Relation::addCouple(const Note& ns, const Note& nd){
     for (unsigned int i=0; i<nbCouples; i++){
         if (couples[i]->getNoteSource().getTitre()==ns.getTitre() && couples[i]->getNoteDestination().getTitre()==nd.getTitre()){
             throw NotesException("Erreur: la relation entre ces deux notes existe déjà existe déjà.");
@@ -53,7 +53,7 @@ void Relation::addCouple(const Note& ns, const Note& nd, QString label){
         }
     }
     if (res) couples[nbCouples]=&CoupleManager::instance->getCouple(ns,nd);
-    else couples[nbCouples]=&CoupleManager::instance->getNewCouple(label, ns, nd);
+    else couples[nbCouples]=&CoupleManager::instance->getNewCouple("", ns, nd);
     nbCouples++;
     couples[nbCouples]->addRelation(this);
 }
@@ -73,9 +73,7 @@ void Relation::removeCouple(Couple& c){
     }
 }
 
-
-
-//méthodes privées classe RelationManager
+/*------------------------------------------------------Méthodes privées de la classe RelationManager-------------------------------------------------------*/
 
 RelationManager* RelationManager::instance=0;
 
@@ -110,7 +108,7 @@ void RelationManager::addRelation (Relation* r){
     nbRelations++;
 }
 
-//méthodes publiques classe RelationManager
+/*------------------------------------------------------Méthodes publiques de la classe RelationManager-------------------------------------------------------*/
 
 RelationManager& RelationManager::getInstance(){
     if (instance==nullptr) {
@@ -136,13 +134,13 @@ void RelationManager::deleteRelation(Relation& r){
     }
 }
 
-Relation &RelationManager::getNewRelation(const QString& t){
+const Relation& RelationManager::getNewRelation(const QString& t){
     Relation* r=new Relation(t,"");
     addRelation(r);
     return *r;
 }
 
-Relation& RelationManager::getRelation(const QString &t)const {
+const Relation& RelationManager::getRelation(const QString& t) const{
     for (unsigned int i=0; i<nbRelations; i++){
         if (relations[i]->getTitre()==t){
             return *relations[i];
@@ -156,8 +154,7 @@ bool RelationManager::existRelation(const QString &t) const{
         if (relations[i]->getTitre()==t){
             return true;
         }
-
-}
+	}
     return false;
 }
 

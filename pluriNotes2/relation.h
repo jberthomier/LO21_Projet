@@ -7,20 +7,22 @@ class Couple;
 class Relation {
 
 private:
+
+	//Attributs
     QString titre;
     QString description;
     Couple** couples;
     unsigned int nbCouples;
     unsigned int nbMaxCouples;
     bool orientation;
-    friend bool RelationManager::noteReference(const Note& n, const QString& t);
-
+	
 public:
-    //constructeur et destructeur
+
+	//Constructeur et destructeur
     Relation(const QString& t, const QString& d): titre(t), description(d), couples(nullptr), nbCouples(0), nbMaxCouples(0), orientation(true){}
     virtual ~Relation();
-
-    //accesseurs en lecture
+	
+	//Accesseurs en lecture
     const QString getTitre() const {return titre;}
     const QString getDescription() const {return description;}
     unsigned int getNbCouples() const {return nbCouples;}
@@ -28,20 +30,24 @@ public:
         if (orientation) return "Relation orientee";
         else return "Relation non orientee";
     }
-    bool getOri() const {return orientation;}
+	bool getOri() const {return orientation;}
     void getCouples() const; //récupérer tous les couples possédant une certaine relation
-    Couple getCouples(QString x, QString y) const;
-
-    //accesseurs en écriture
+	Couple getCouples(QString x, QString y) const;
+	
+	//Accesseurs en écriture
     void setTitre(const QString& t){titre=t;}
     void setDescription(const QString& d){description=d;}
     void setOrientation(bool o){orientation=o;}
+	
+	//Classe et méthode amies
+	friend class RelationManager;
+	friend bool RelationManager::noteReference(const Note& n, const QString& t);
 
-    //ajouter et enlever un couple d'une relation
-    void addCouple(const Note &ns, const Note &nd,QString label); //pour créer une relation entre deux éléments (cf document explication)
+	//Ajouter et enlever un couple d'une relation
+    void addCouple(const Note &ns, const Note &nd); //pour créer une relation entre deux éléments (cf document explication)
     void removeCouple(Couple& c); //enlever un couple d'une relation (cf document explication)
 
-    class Iterator {
+	class Iterator {
         public:
 
             Couple* operator *(){return *current;}
@@ -73,7 +79,7 @@ public:
         Iterator getIterator() {
             return Iterator(couples, nbCouples);
         }
-
+		
 };
 
 #endif // RELATION_H
