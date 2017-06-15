@@ -7,29 +7,30 @@
 class Couple {
 
 private:
-    //attributs
+
+    //Attributs
     QString label;
     const Note& noteSource;
     const Note& noteDestination;
-
+	
     Relation** relations;
     unsigned int nbRelations;
     unsigned int nbMaxRelations;
-
-    //méthodes
+	
+    //Méthodes
     void addRelation(Relation* r);
     void removeRelation(Relation* r);
 
-    //méthodes amies
-    friend void Relation::addCouple(const Note& ns, const Note& nd,QString l);
+    //Méthodes amies
+    friend void Relation::addCouple(const Note& ns, const Note& nd);
     friend void Relation::removeCouple(Couple& c);
 
 public:
-    //constructeur
-    Couple(const QString& l, const Note& n1, const Note& n2): label(l), noteSource(n1), noteDestination(n2){}
-    //Couple(const QString& l,QString& n1, QString& n2): label(l), source(n1), destination(n2){}
 
-    //accesseurs en lecture
+	//Constructeur
+    Couple(const QString& l, const Note& n1, const Note& n2): label(l), noteSource(n1), noteDestination(n2){}
+    
+	//Accesseurs en lecture
     const QString getLabel() const {return label;}
     const Note& getNoteSource() const {return noteSource;}
     const Note& getNoteDestination() const {return noteDestination;}
@@ -38,8 +39,8 @@ public:
             qDebug()<<"Label: "<<relations[i]->getTitre();
         }
     }
-
-    //accesseur en écriture
+	
+	//Accesseur en écriture
     void setLabel(const QString& l){label=l;}
 
 };
@@ -47,37 +48,37 @@ public:
 class CoupleManager {
 
 private:
-    //attributs
+    //Attributs
     static CoupleManager* instance;
     Couple** couples;
     unsigned int nbCouples;
     unsigned int nbMaxCouples;
 
-    //constructeurs, destructeur et opérateur d'affectation
+    //Constructeurs, destructeur et opérateur d'affectation
     CoupleManager();
     CoupleManager(const CoupleManager& cm);
     virtual ~CoupleManager();
     void operator=(const CoupleManager& cm);
 
-    //méthodes
+    //Méthodes
     Couple& getNewCouple(const QString& t, const Note &ns, const Note &nd);
     void addCouple(Couple *c);
     void deleteCouple(Couple& c);
 
-    //méthodes amies
-    friend void Relation::addCouple(const Note& ns, const Note& nd,QString l);
+    //Méthodes amies
+    friend void Relation::addCouple(const Note& ns, const Note& nd);
     friend void Relation::removeCouple(Couple& c);
 
 public:
     static CoupleManager& getInstance();
     static void freeInstance();
 
-    //accesseur en écriture
+    //Accesseur en écriture
     unsigned int getNbCouples()const {return nbCouples;}
     Couple& getCouple(const QString& t)const;
     Couple& getCouple(const Note &ns, const Note &nd) const;
 
-    //visualisation
+    //Visualisation
     void arborescence(const Note& n); //visualiser l'arborescence des relations d'une note
     void afficherAscendants(const Note& n);
     void afficherDescendants(const Note& n);
