@@ -18,101 +18,29 @@ Note& Note::operator=(Note const& note) {
 
 /*------------------------------------------------------Méthodes des classes filles-------------------------------------------------------*/
 
-/*Article* Article::edit(){
-    Article* newArticle = new Article(*this);
-    this->archiver();
-    QDate d;
-    newArticle->setDdm(d);
-    QString t;
-    qDebug()<< "Entrez le nouveau texte : " << endl;
-    //qtin>> t;
-    newArticle->setText(t);
-    return newArticle;
-}
-Tache* Tache::edit() {
-    QString a;
-    unsigned int p, day, month, year;
-    QDate d_echeance(day,month,year);
-    QDate d; //date actuelle
-    int e;
-    Tache* newTask = new Tache(*this);
-    this->archiver();
-    newTask->setDdm(d);
-    qDebug()<< "Entrez l'action de la tache : " << endl;
-    //qtin>> a;
-    newTask->setAction(a);
-    qDebug()<< "Entrez la priorite de la tache : " << endl;
-    //qtin>> p;
-    newTask->setPriorite(p);
-    qDebug()<< "Entrez le jour d'echeance de la tache : " << endl;
-    //qtin>> day;
-    qDebug()<< "Entrez le mois d'echeance de la tache : " << endl;
-    //qtin>> month;
-    qDebug()<< "Entrez l'annee d'echeance de la tache : " << endl;
-    //qtin>> year;
-    d_echeance.setDate(day, month, year);
-    newTask->setEcheance(d_echeance);
-    qDebug()<< "Entrez le statut de la tache : " << endl;
-    //qtin>> e;
-    switch (e) {
-    case 0:
-        newTask->setEtat(En_attente);
-        break;
-    case 1:
-        newTask->setEtat(En_cours);
-        break;
-    case 2:
-        newTask->setEtat(Terminee);
-        break;
-    default:
-        qDebug()<< "Statut inconnu." << endl;
-    }
-    return newTask;
-}
-Media* Media::edit(){
-    return this;
-}
-*/
-
-void Article::print() const {
-    qDebug()<< "Article : " << getTitre() << "\n" << "texte:\n" << getTexte() << "\n";
-}
-
-void Tache::print() const {
-    qDebug()<< "Tache : " << getTitre() << "\n" << "Action :\n" << getAction() << "\n" << "Priorite :\n" << getPriorite() << "\n" << "Statut :\n" << getStatut() << "\n";
-    qDebug()<< "Echeance :\n";
-    QDate d = getEcheance();
-    qDebug()<<d;
-}
-
-void Media::print() const{
-    qDebug()<< "Media :" << getDescription() << "\n" << "Chemin: \n" << getChemin() << "\n" << "TypeMedia: \n" << getTypeMedia() <<  "\n";
-}
-
-
+//Opérateur de comparaison des priorités des tâches
 bool Tache::operator<(const Tache &tache) const{
-    return (priorite < tache.getPriorite());
+  return (priorite < tache.getPriorite());
 }
 
-void Article::save(QXmlStreamWriter & stream) const
-{
+//Méthodes save
+void Article::save(QXmlStreamWriter & stream) const{
     stream.writeTextElement("text", texte);
 }
 
-void Tache::save(QXmlStreamWriter & stream) const
-{
+void Tache::save(QXmlStreamWriter & stream) const{
     stream.writeTextElement("action", action);
     stream.writeTextElement("priorite", QVariant(priorite).toString());
     stream.writeTextElement("etat", QVariant(etat).toString());
 
 }
 
-void Media::save(QXmlStreamWriter & stream) const
-{
+void Media::save(QXmlStreamWriter & stream) const{
     stream.writeTextElement("description", description);
     stream.writeTextElement("chemin", chemin);
 }
 
+//Méthode saveNote
 void Article::saveNote(QString repertoire) const{
     QDir::setCurrent(repertoire);
     qDebug()<<"test6";
