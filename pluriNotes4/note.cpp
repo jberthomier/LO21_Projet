@@ -43,21 +43,16 @@ void Media::save(QXmlStreamWriter & stream) const{
 //Méthode saveNote
 void Article::saveNote(QString repertoire) const{
     QDir::setCurrent(repertoire);
-    qDebug()<<"test6";
     QString filename = this->getTitre()+".xml";
-    qDebug()<<"test7";
     QFile newfile(filename); //le nom du fichier correspond au titre de la note
-    qDebug()<<"test7-1";
     if (!newfile.open(QIODevice::WriteOnly | QIODevice::Text))
            throw NotesException(QString("erreur sauvegarde notes : ouverture fichier xml"));
-       qDebug()<<"test8";
        QDate ddm = QDate::currentDate();
        QString dateM = ddm.toString("dd/MM/yyyy");
        QString dateC = this->getDate().toString("dd/MM/yyyy");
        QXmlStreamWriter stream(&newfile);       
        stream.setAutoFormatting(true);
        stream.writeStartDocument();
-       qDebug()<<"test9";
        stream.writeStartElement("Article");
        stream.writeTextElement("id",this->getId());       
        stream.writeTextElement("datecrea", dateC);
@@ -65,11 +60,8 @@ void Article::saveNote(QString repertoire) const{
        stream.writeTextElement("titre",this->getTitre());
        stream.writeTextElement("text", this->getTexte());
        stream.writeEndElement();
-       qDebug()<<"test10";
        stream.writeEndDocument();
-       qDebug()<<"test11";
        newfile.close();
-       qDebug()<<"test12";
 
 }
 
@@ -102,7 +94,6 @@ void Tache::saveNote(QString repertoire) const{
        QXmlStreamWriter stream(&newfile);
        stream.setAutoFormatting(true);
        stream.writeStartDocument();
-       qDebug()<<"test9";
        stream.writeStartElement("Tache");
        stream.writeTextElement("datecrea",datecrea);
        stream.writeTextElement("datemodif", dateM);
@@ -113,30 +104,22 @@ void Tache::saveNote(QString repertoire) const{
        stream.writeTextElement("etat", e);
        stream.writeTextElement("priorite",priorite);
        stream.writeEndElement();
-       qDebug()<<"test10";
        stream.writeEndDocument();
-       qDebug()<<"test11";
        newfile.close();
-       qDebug()<<"test12";
 }
 
 void Media::saveNote(QString repertoire) const{
     QDir::setCurrent(repertoire);
-    qDebug()<<"test6";
     QString filename = this->getTitre()+".xml";
-    qDebug()<<"test7";
     QFile newfile(filename); //le nom du fichier correspond au titre de la note
-    qDebug()<<"test7-1";
     if (!newfile.open(QIODevice::WriteOnly | QIODevice::Text))
            throw NotesException(QString("erreur sauvegarde notes : ouverture fichier xml"));
-       qDebug()<<"test8";
        QDate ddm = QDate::currentDate();
        QString dateM = ddm.toString("dd/MM/yyyy");
        QString dateC = this->getDate().toString("dd/MM/yyyy");
        QXmlStreamWriter stream(&newfile);
        stream.setAutoFormatting(true);
        stream.writeStartDocument();
-       qDebug()<<"test9";
        stream.writeStartElement("Media");
        stream.writeTextElement("id",this->getId());
        stream.writeTextElement("titre",this->getTitre());
@@ -145,9 +128,6 @@ void Media::saveNote(QString repertoire) const{
        stream.writeTextElement("description",this->getDescription());
        stream.writeTextElement("Chemin", this->getFilename());
        stream.writeEndElement();
-       qDebug()<<"test10";
        stream.writeEndDocument();
-       qDebug()<<"test11";
        newfile.close();
-       qDebug()<<"test12";
 }

@@ -5,7 +5,6 @@
 void TacheEditeur::sauvegarde() {
     //Appel du getNote() de NoteEditeur
     if(dynamic_cast<Tache*>(getNote()))
-        qDebug()<<"tache";
     dynamic_cast<Tache*>(getNote())->setAction(action->toPlainText());
     dynamic_cast<Tache*>(getNote())->setPriorite(priorite->value());
     //dynamic_cast<Tache*>(getNote())->setDdm(echance->toPlainText());

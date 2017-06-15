@@ -51,17 +51,13 @@ NoteEditeur::~NoteEditeur()
 }
 
 void NoteEditeur::SaveNote() {
-    qDebug()<<"test1";
+
     NoteManager& m = NoteManager::getInstance();
     QString repertoire = m.getDirectory();//récupère le répertoire
-    qDebug()<<"test2";
 
     note->setTitre(titre->text());
-    qDebug()<<"test3";
-
     //appel de la méthode save du NoteManager
     m.save(note,repertoire);
-    qDebug()<<"test14";
 
     //Affichage d'un popup d'information
     QMessageBox::information(this,"Sauvegarde","Votre article a bien été sauvegardé");

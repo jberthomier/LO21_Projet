@@ -54,13 +54,9 @@ int main(int argc, char* argv[]){
     m.archiverNote(a3);
     m.pushToVersions(a3);*/
 
-    qDebug()<<"Test";
     QApplication app(argc, argv);
-    qDebug()<<"Test1";
     PluriNotes p;
-    qDebug()<<"Test2";
     p.show();
-    qDebug()<<"Test3";
     return app.exec();
 
 

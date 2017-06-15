@@ -129,18 +129,6 @@ void RelationEditeur::save(){
         QMessageBox::information(this,"","Champs vides à compléter !");
 }
 
-/*void RelationEditeur::deleteRelation(){
-    RelationManager& rm = RelationManager::getInstance();
-    foreach (QWidget *widget, QApplication::topLevelWidgets()) {
-            if ( widget->windowTitle() == "PluriNotes")
-            {
-                qDebug() << ancienTitre;
-               qobject_cast<PluriNotes*>(widget)->deleteRelation(&(rm.getRelation(ancienTitre)));
-               qDebug() << "lolol";
-            }
-     }
-     QMessageBox::information(this,"","Sauvergarde Réussie");
-}*/
 
 /*------------------------------------------------------Constructeur publique de la classe ExplorationRelations-------------------------------------------------------*/
 

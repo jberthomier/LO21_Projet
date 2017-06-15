@@ -16,9 +16,7 @@ NoteManager::NoteManager() : versions(0), id("0") {
 
    //le repertoire courant sera le repertoire de l'exécutable
    QString repertoire= QDir::currentPath();
-   qDebug()<<repertoire;
    directory=repertoire;
-   qDebug()<<"Test1";
 
    // si un fichier contenant le dernier id existe, alors le télécharger. sinon id vaut juste "0".
    QFile idfile("id");
@@ -32,12 +30,9 @@ NoteManager::NoteManager() : versions(0), id("0") {
     QStringList filter;
     filter<<"*.xml";
    QFileInfoList noteList = directory.entryInfoList(filter,QDir::Files);
-   qDebug()<<"Liste ?";
    for (auto ite=noteList.begin(); ite!=noteList.end(); ++ite){
-       qDebug()<<"sdqhdf";
        QString name = (*ite).fileName();
        QFile file(name);
-       qDebug()<<name;
        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
            throw NotesException("Erreur ouverture fichier notes");
        }
@@ -82,7 +77,6 @@ NoteManager::NoteManager() : versions(0), id("0") {
                }
 
                if(xml.name() == "Tache") {
-                   qDebug()<<"new tache\n";
                    QString identificateur;
                    QString titre;
                    QString action;
@@ -96,43 +90,33 @@ NoteManager::NoteManager() : versions(0), id("0") {
                            if(xml.name() == "id") {
                                xml.readNext();
                                identificateur=xml.text().toString();
-                               qDebug()<<"id="<<identificateur<<"\n";
                            }
 
                            if(xml.name() == "titre") {
                                xml.readNext();
                                titre=xml.text().toString();
-                               qDebug()<<"titre="<<titre<<"\n";
                            }
 
                            if(xml.name() == "action") {
                                xml.readNext();
                                action=xml.text().toString();
-                               qDebug()<<"action="<<action<<"\n";
                            }
                            if(xml.name() == "echeance") {
                                xml.readNext();
                                echeance=xml.text().toString();
-                               qDebug()<<"echeance="<<echeance<<"\n";
                            }
                            if(xml.name() == "etat") {
                                xml.readNext();
                                etat=xml.text().toString();
-                               qDebug()<<"etat="<<etat<<"\n";
                            }
                            if(xml.name() == "priorite") {
                                xml.readNext();
                                priorite=xml.text().toString();
-                               qDebug()<<"priorite="<<priorite<<"\n";
                            }
-
-                           qDebug()<<"HEY10";
                        }
                        // ...and next...
                        xml.readNext();
-                       qDebug()<<"HEY11";
                    }
-                   qDebug()<<"ajout note "<<identificateur<<"\n";
                    Tache* t=makeTache();
 		   setNoteId(t,identificateur);
                    Statut e;
@@ -143,21 +127,15 @@ NoteManager::NoteManager() : versions(0), id("0") {
                    if (etat=="Terminee")
                        e=Terminee;
                    QDate DateE = QDate::fromString(echeance,"dd/MM/yyyy");
-                   qDebug()<<DateE;
                    unsigned int p= priorite.toInt();
 
                    t->setFilename(titre);
-                   qDebug()<<t->filename;
                    t->setTitre(titre);
                    t->setAction(action);
-                   qDebug()<<t->action;
                    t->setEtat(e);
-                   qDebug()<<t->etat;
                    t->setEcheance(DateE);
-                   qDebug()<<t->echeance;
                    t->setPriorite(p);
-                   qDebug()<<t->priorite;
-                   //pushToVersions(t);
+                   pushToVersions(t);
                }
                if(xml.name() == "Media") {
                    qDebug()<<"new media\n";
@@ -171,37 +149,31 @@ NoteManager::NoteManager() : versions(0), id("0") {
                        if(xml.tokenType() == QXmlStreamReader::StartElement) {
                            if(xml.name() == "id") {
                                xml.readNext(); identificateur=xml.text().toString();
-                               qDebug()<<"id="<<identificateur<<"\n";
                            }
 
                            if(xml.name() == "titre") {
                                xml.readNext(); titre=xml.text().toString();
-                               qDebug()<<"titre="<<titre<<"\n";
                            }
 
                            if(xml.name() == "description") {
                                xml.readNext();
                                description=xml.text().toString();
-                               qDebug()<<"description="<<description<<"\n";
                            }
                            if(xml.name() == "Chemin") {
                                xml.readNext();
                                chemin=xml.text().toString();
-                               qDebug()<<"chemin="<<chemin<<"\n";
+
                            }
-                           qDebug()<<"HEY10";
                        }
                        xml.readNext();
-                       qDebug()<<"HEY11";
                    }
-                   qDebug()<<"ajout note "<<identificateur<<"\n";
                    Media* med=makeMedia();
 		   setNoteId(med,identificateur);
                    med->setFilename(titre);
                    med->setTitre(titre);
                    med->setDescription(description);
                    med->setChemin(chemin);
-                   //pushToVersions(med);
+                   pushToVersions(med);
                }
            }
        }
@@ -218,9 +190,7 @@ NoteManager::NoteManager() : versions(0), id("0") {
  * On appel également la méthode clear sur le tableau de versions permettant de vider le tableau, les destructeurs appelés libèrent la mémoire automatiquement.
  */
 NoteManager::~NoteManager() {
-	//sauvegarder dans un fichier le dernier id utilisé pour le remettre à jour (créer si 'louverture échoue)
-    //saveAll(); //fonction qui sauve le texte des Notes sur un fichier en mémoire
-    versions.clear(); // destruction des vecteurs internes. les destructeurs appelés libèrent la mémoire automatiquement
+    versions.clear();
 }
 
 /*------------------------------------------------------Gestion de l'identiication des versions-------------------------------------------------------*/
@@ -391,6 +361,7 @@ void NoteManager::restaurerNote( QString  id) {
  * Ensuite on restaure la version la plus récente.
  */
 void NoteManager::supprimerNoteActuelle( QString  id) {
+    qDebug()<<"hey there2";
     QVector<Note*> v;
     Note * oldNote;
     int position = -1;
@@ -399,27 +370,30 @@ void NoteManager::supprimerNoteActuelle( QString  id) {
             if ( (*ite2)->getId() == id && (*ite2)->isActive() )  { //tester si la note actuelle est dans une relation référence. si oui alors archiver
                 oldNote = (*ite2); //Mémorisation de la note supprimée afin de ne pas la restaurer accidentellement dans la deuxième partie de la fonction
                 (*ite2)->archiver(); //Passer en archive (active=false) la note active
+                qDebug()<<"hey there3";
                 v = *ite; //v est le vecteur dans lequel est rangée la note
                 break;
             }
-            if ((*ite2)->getId() == id && (*ite2)->isActive()) { //si la note n'est pas référencée alors la jeter dans la corbeille
+            /*if ((*ite2)->getId() == id && (*ite2)->isActive()) { //si la note n'est pas référencée alors la jeter dans la corbeille
                 (*ite2)->jeter();
                 v = *ite;
                 break;
-            }
+            }*/
         }
         if (position != -1) break;
     }
+    qDebug()<<"hey there4";
     //Trouver la version à restaurer : tri sur la date de dernière modification la plus récente
-    QDate date = v[0]->getDateM();
+    QDate date(1970,1,1);
     Note * note = NULL;
-    for (int i = 0; i < v.size(); i++) {
-            if ( date<v[i]->getDateM() && oldNote->getId()!= v[i]->getId() ) {
-                date = v[i]->getDateM();
-                note = v[i];
+        for (int i = 0; i < v.size(); i++) {
+                if ( date<v[i]->getDateM() && oldNote->getId()!= v[i]->getId() ) {
+                    date = v[i]->getDateM();
+                    note = v[i];
             }
-        }
-    note->restaurer();
+    }
+    if (note != NULL)
+        note->restaurer();
 }
 
 /**

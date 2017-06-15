@@ -79,6 +79,8 @@ public slots :
 	
 	void load();
 
+    void supprimer();
+
 };
 
 #endif // PluriNotes_H

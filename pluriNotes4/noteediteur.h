@@ -68,7 +68,7 @@ signals:
 public slots:
 
     //Les slots sont avant tout des méthodes qui peuvent être appelées normalement
-    void saveNote();
+   // void saveNote();
     void activeSave();
     void verification();
 };

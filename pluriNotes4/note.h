@@ -1,8 +1,6 @@
 #ifndef NOTE_H
 #define NOTE_H
 
-#include "date.h"
-
 #include <QTextCodec>
 #include <QtXml>
 #include <QDate>

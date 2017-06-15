@@ -51,9 +51,7 @@ public:
     void setMediaDescription(QString d, Media*m){m->setDescription(d);}
     void setArticleText(Article*a,QString t){a->setText(t);}
     void setMediaPath(QString path, Media* m){m->setChemin(path);}
-    template<typename T> void editNote(const QString  id);
     void restaurerNote(const QString  id);
-    void supprimerNoteActuelle(const QString  id);
     void supprimerVersions(const QString  id);
     void archiverNote(Note* note){note->archiver();}
     void viderCorbeille();
@@ -63,34 +61,11 @@ public:
     QList<Note*> getArchiveNotes(); //retourne la liste des notes archivées
     QList<Tache*> getSortedTasks();
     void load();
-
     QVector<Note*> getVector(QString id);
-};
 
-template<typename T> void NoteManager::editNote(QString  id) {
-    try {
-        T t = getNote(id);
-        if (t.isActive() == false)
-            throw ArchiveException("La note est archivee.");
-        T* newNote = t.edit();
-        int position = -1;
-        for (int i = 0; i < versions.size(); i++) {
-            for (int j = 0; j < versions[i].size(); i++) {
-                if (id == versions[i][j]->getId()) {
-                    position = i;
-                    break;
-                }
-            }
-            if (position != -1) break;
-        }
-        versions[position].push_back(*newNote);
-    }
-    catch (NotesException e) { //si la note n'existe pas, on veut en créer une
-        Note* note = NoteManager::makeNote();
-        QVector<Note*> NewNote;
-        NewNote.push_back(note);
-        versions.push_back(NewNote);
-    }
-}
+public slots:
+
+    void supprimerNoteActuelle(const QString  id);
+};
 
 #endif // NOTEMANAGER_H

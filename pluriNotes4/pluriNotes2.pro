@@ -11,7 +11,6 @@ QT += core \
       gui
 
 SOURCES += \
-    date.cpp \
     main.cpp \
     note.cpp \
     couple.cpp \
@@ -28,7 +27,6 @@ SOURCES += \
     arborescence.cpp
 
 HEADERS += \
-    date.h \
     note.h \
     couple.h \
     relation.h \
