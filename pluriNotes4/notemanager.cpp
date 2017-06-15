@@ -78,7 +78,7 @@ NoteManager::NoteManager() : versions(0), id("0") {
                    a->setFilename(titre);
                    a->setText(text);
                    a->setTitre(titre);
-                   pushToVersions(a);
+                   //pushToVersions(a);
                }
 
                if(xml.name() == "Tache") {
@@ -134,6 +134,7 @@ NoteManager::NoteManager() : versions(0), id("0") {
                    }
                    qDebug()<<"ajout note "<<identificateur<<"\n";
                    Tache* t=makeTache();
+		   setNoteId(t,identificateur);
                    Statut e;
                    if (etat=="En attente")
                        e=En_attente;
@@ -156,7 +157,7 @@ NoteManager::NoteManager() : versions(0), id("0") {
                    qDebug()<<t->echeance;
                    t->setPriorite(p);
                    qDebug()<<t->priorite;
-                   pushToVersions(t);
+                   //pushToVersions(t);
                }
                if(xml.name() == "Media") {
                    qDebug()<<"new media\n";
@@ -195,11 +196,12 @@ NoteManager::NoteManager() : versions(0), id("0") {
                    }
                    qDebug()<<"ajout note "<<identificateur<<"\n";
                    Media* med=makeMedia();
+		   setNoteId(med,identificateur);
                    med->setFilename(titre);
                    med->setTitre(titre);
                    med->setDescription(description);
                    med->setChemin(chemin);
-                   pushToVersions(med);
+                   //pushToVersions(med);
                }
            }
        }
