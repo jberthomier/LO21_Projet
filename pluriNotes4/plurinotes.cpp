@@ -222,6 +222,9 @@ void PluriNotes::load() {
                     // ...and next...
                     xml.readNext();
                 }
+                //Archivage de la note ouverte (considérée comme modifiée si ouverte)
+                Note* oldNote = m.getNote(identificateur);
+                m.archiverNote(oldNote);
                 Tache* t=m.makeTache();
                 Statut e;
                 if (etat=="En attente")
@@ -277,6 +280,9 @@ void PluriNotes::load() {
                     // ...and next...
                     xml.readNext();
                 }
+                //Archivage de la note ouverte (considérée comme modifiée si ouverte)
+                Note* oldNote = m.getNote(identificateur);
+                m.archiverNote(oldNote);
                 Media* med=m.makeMedia();
                 m.setFilename(titre);
                 m.setNoteTitle(med,titre);
