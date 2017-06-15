@@ -1,7 +1,6 @@
 #ifndef NOTEEDITEUR_H
 #define NOTEEDITEUR_H
 
-#include "qwidget.h"
 #include <QApplication>
 #include <QPushButton>
 #include <QLabel>
@@ -13,17 +12,18 @@
 #include <iostream>
 #include <QObject>
 #include <QMessageBox>
+
 #include "Note.h"
+#include "qwidget.h"
 
 class NoteEditeur : public QWidget
 {
 private :
     Q_OBJECT
 
+protected:
 
-
-protected :
-
+	//Attributs
     QHBoxLayout * cid;
     QHBoxLayout * ctitre;
     QVBoxLayout * couche;
@@ -34,25 +34,38 @@ protected :
     QLineEdit *titre;
     Note * note;
     QString filename;
+	QHBoxLayout *layout;
 
+	//Constructeurs
     NoteEditeur(NoteEditeur& );
     NoteEditeur& operator=(NoteEditeur const&);
-    QHBoxLayout *layout;
-    Note* getNote() const { return note; }
+	
+	//Accesseur en lecture
+	Note* getNote() const { return note; }
 
 public:
+
+	//Attribut
+    static QVector<NoteEditeur*> editeurs;
+	
+	//Constructeur et desctructeur
     NoteEditeur(Note* n, QWidget *parent = 0);
     virtual ~NoteEditeur();
+	
+	//Accesseur en lecture
     const QString getId() const { return id->text(); }
-    static QVector<NoteEditeur*> editeurs;
+	
+	//Méthode
     void SaveNote();
 
 signals:
+
     void Editing(NoteEditeur* f);
     void Editionfinished(NoteEditeur* f);
 
 
 public slots:
+
     //Les slots sont avant tout des méthodes qui peuvent être appelées normalement
     void saveNote();
     void activeSave();

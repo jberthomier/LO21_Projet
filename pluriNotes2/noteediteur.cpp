@@ -2,8 +2,9 @@
 #include "notemanager.h"
 #include "QFileDialog"
 
-QVector<NoteEditeur*> NoteEditeur::editeurs= {};
+/*------------------------------------------------------Méthodes publiques de la classe NoteEditeur-------------------------------------------------------*/
 
+QVector<NoteEditeur*> NoteEditeur::editeurs= {};
 
 NoteEditeur::NoteEditeur(Note* n,QWidget *parent) :
     QWidget(parent),
@@ -49,14 +50,12 @@ NoteEditeur::NoteEditeur(Note* n,QWidget *parent) :
 
 }
 
-
 NoteEditeur::~NoteEditeur()
 {
     editeurs.remove(editeurs.indexOf(this));
 }
 
-
-void NoteEditeur::saveNote() {
+void NoteEditeur::SaveNote() {
     qDebug()<<"test1";
     NoteManager& m = NoteManager::getInstance();
     QString repertoire = m.getDirectory();//récupère le répertoire
