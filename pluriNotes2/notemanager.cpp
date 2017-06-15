@@ -341,7 +341,7 @@ Article* NoteManager::makeArticle() {
     qDebug()<<"Entree1";
     QDate date = QDate::currentDate();
     qDebug()<<"Entree3";
-    Article* a= new Article(id,"",date,date,"","");
+    Article* a= new Article(id,"","",date,date,"");
     return a;
     //
 }
@@ -349,13 +349,13 @@ Article* NoteManager::makeArticle() {
 Tache* NoteManager::makeTache() {
     QString id = newId();
     QDate date = QDate::currentDate();
-    return new Tache(id,"",date,date,"",0,date,En_cours, "");
+    return new Tache(id,"","",date,date,"",0,date,En_cours);
 }
 
 Media* NoteManager::makeMedia() {
     QString id = newId();
     QDate date = QDate::currentDate();
-    return new Media(id,"", date, date,"", "","",image);
+    return new Media(id,"", "",date, date,"", "","",image);
 }
 
 /**

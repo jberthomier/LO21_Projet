@@ -62,7 +62,7 @@ public:
     QList<Tache*> getSortedTasks();
     void load();
 
-    QVector<Note*> NoteManager::getVector(QString id);
+    QVector<Note*> getVector(QString id);
 };
 
 template<typename T> void NoteManager::editNote(QString  id) {
@@ -74,7 +74,7 @@ template<typename T> void NoteManager::editNote(QString  id) {
         int position = -1;
         for (int i = 0; i < versions.size(); i++) {
             for (int j = 0; j < versions[i].size(); i++) {
-                if (id == versions[i][j].getId()) {
+                if (id == versions[i][j]->getId()) {
                     position = i;
                     break;
                 }

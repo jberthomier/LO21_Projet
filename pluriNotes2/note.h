@@ -63,8 +63,8 @@ private:
 	 * \details Nom du fichier dans lequel on veut sauvegarder notre note
 	 */
 	QString filename;
-    TIME::Date dateCreation;
-    TIME::Date dateDerniereModif;
+    QDate dateCreation;
+    QDate dateDerniereModif;
     /**
      * \details Attribut booléen permettant de déterminer si une note est active ou archivée
      */
@@ -135,7 +135,7 @@ protected:
     /**
      * \brief Constructeur de Note
      */
-    Note (QString id, const QString& t, TIME::Date dc, TIME::Date ddm) : identificateur(id),titre(t), dateCreation(dc), dateDerniereModif(ddm), active(false), corbeille(false) {}
+    Note (QString id, const QString& t, QString f, QDate dc, QDate ddm) : identificateur(id),titre(t), filename(f), dateCreation(dc), dateDerniereModif(ddm), active(false), corbeille(false) {}
     /**
      * \brief Constructeur de recopie de Note
      */
@@ -161,7 +161,7 @@ protected:
      * \brief Accesseur en écriture de la date de dernière modification d'une note
      * \details Cette méthode est définie en protected afin que seules les classes filles et NoteManager puissent l'utiliser
      */
-	void setDdm(TIME::Date d) {dateDerniereModif = d;}
+    void setDdm(QDate d) {dateDerniereModif = d;}
     /**
      * \brief Accesseur en écriture de l'attribut active d'une note
      * \details Cette méthode est définie en protected afin que seules les classes filles et NoteManager puissent l'utiliser
@@ -211,7 +211,7 @@ public :
     /**
      * \brief Accesseur en lecture de la date de création d'une note
      */
-    TIME::Date getDate() const {return dateCreation;}
+    QDate getDate() const {return dateCreation;}
 	/**
      * \brief Accesseur en lecture du nom du fichier permettant de stocker les notes
      */
@@ -219,7 +219,7 @@ public :
     /**
      * \brief Accesseur en lecture de la date de dernière modification d'une note
      */
-    TIME::Date getDateM() const {return dateDerniereModif;}
+    QDate getDateM() const {return dateDerniereModif;}
     /**
      * \brief Accesseur en lecture pour savoir si une note est active ou archivée
      */
@@ -261,7 +261,7 @@ private :
      * \brief Constructeur de Article
      * \details Le constructeur est dans la partie privée afin que seul NoteManager puisse créer un article
      */
-    Article (QString id, const QString& t, TIME::Date dc, TIME::Date ddm, const QString& te) : Note(id,t,dc,ddm), texte(te) {}
+    Article (QString id, const QString& t, QString f, QDate dc, QDate ddm, const QString& te) : Note(id,t,f,dc,ddm), texte(te) {}
     /**
      * \brief Constructeur de recopie de Article
      * \details Le constructeur est dans la partie privée afin que seul NoteManager puisse créer un article
@@ -328,7 +328,7 @@ private :
     /**
      * \details Attribut permettant de déterminer une éventuelle date à laquelle la tâche doit être terminée
      */
-    TIME::Date echeance;
+    QDate echeance;
     /**
      * \details Attribut permettant d'associer un état à une tâche (cf #Statut)
      */
@@ -344,7 +344,7 @@ private :
      * \brief Constructeur de Tache
      * \details Le constructeur est dans la partie privée afin que seul NoteManager puisse créer une tâche
      */
-    Tache(QString id, const QString& t, TIME::Date dc, TIME::Date ddm, unsigned int p, TIME::Date e, Statut s, const QString& a) : Note(id,t,dc,ddm), action (a), priorite(p), echeance(e), etat(s) {}
+    Tache(QString id, const QString& t, QString f, QDate dc, QDate ddm, unsigned int p, QDate e, Statut s, const QString& a) : Note(id,t,f,dc,ddm), action (a), priorite(p), echeance(e), etat(s) {}
     /**
      * \brief Constructeur de recopie de Tache
      * \details Le constructeur est dans la partie privée afin que seul NoteManager puisse créer une tâche
@@ -366,7 +366,7 @@ private :
      * \brief Accesseur en écriture de la date d'échéance d'une tâche
      * \details Cette méthode est définie en privé afin que seul NoteManager puisse l'utiliser
      */
-    void setEcheance(TIME::Date d) { echeance = d;}
+    void setEcheance(QDate d) { echeance = d;}
     /**
      * \brief Accesseur en écriture de l'état d'une tâche
      * \details Cette méthode est définie en privé afin que seul NoteManager puisse l'utiliser
@@ -397,7 +397,7 @@ public:
     /**
      * \brief Accesseur en lecture de la date d'échéance d'une tâche
      */
-    TIME::Date getEcheance() const {return echeance;}
+    QDate getEcheance() const {return echeance;}
     /**
      * \brief Accesseur en lecture de l'état d'une tâche
      */
@@ -451,7 +451,7 @@ private :
      * \brief Constructeur de Media
      * \details Le constructeur est dans la partie privée afin que seul NoteManager puisse créer un article
      */
-     Media(QString id, const QString& t, TIME::Date dc, TIME::Date ddm, const QString& d, const QString& c, mType ty) : Note(id,t,dc,ddm), description(d), chemin(c), typeMedia(ty) {}
+     Media(QString id, const QString& t, QString f, QDate dc, QDate ddm, const QString& d, const QString& c, mType ty) : Note(id,t,f,dc,ddm), description(d), chemin(c), typeMedia(ty) {}
     /**
      * \brief Constructeur de recopie de Media
      * \details Le constructeur est dans la partie privée afin que seul NoteManager puisse créer un article
@@ -483,6 +483,7 @@ private :
      * \brief Classe amie
      */
     friend class NoteManager;
+    friend class MediaEditeur;
 
 public :
     //Accesseurs en lecture
