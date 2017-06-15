@@ -3,6 +3,8 @@
 #include <QList>
 #include <QTabWidget>
 
+/*------------------------------------------------------Constructeur et destructeur-------------------------------------------------------*/
+
 PluriNotes::PluriNotes(QWidget *parent) : QMainWindow(parent)
 {
     ui.setupUi(this);
@@ -28,10 +30,35 @@ PluriNotes::PluriNotes(QWidget *parent) : QMainWindow(parent)
 
 }
 
-
 PluriNotes::~PluriNotes()
 {
     //delete ui;
+}
+
+/*------------------------------------------------------Méthodes public-------------------------------------------------------*/
+
+/*------------------------------------------------------Accesseur en lecture-------------------------------------------------------*/
+
+void PluriNotes::getChemin (QListWidgetItem* id) {
+    NoteManager& m = NoteManager::getInstance();
+    Note* n=m.getNote(id->text());
+    qDebug()<<"Ouverture note"<<id->text();
+    AffichageNote* viewer = new AffichageNote();
+    viewer->afficheNote(n);
+    viewer->show();
+}
+
+/*------------------------------------------------------Méthodes public slots-------------------------------------------------------*/
+
+void PluriNotes::ouvrirNote(QListWidgetItem* item) {
+
+    NoteManager& m = NoteManager::getInstance();
+    Note* n = m.getNote(item->text());
+    qDebug()<<"ouverture note"<<item->text();
+    AffichageNote* viewer = new AffichageNote();
+    viewer->afficheNote(n);
+    viewer->show();
+
 }
 
 void PluriNotes::newArticle()
@@ -78,15 +105,6 @@ void PluriNotes::newMedia()
         viewer->show();
 }
 
-void PluriNotes::getChemin (QListWidgetItem* id) {
-    NoteManager& m = NoteManager::getInstance();
-    Note* n=m.getNote(id->text());
-    qDebug()<<"Ouverture note"<<id->text();
-    AffichageNote* viewer = new AffichageNote();
-    viewer->afficheNote(n);
-    viewer->show();
-}
-
 void PluriNotes::updateActiveNotes(){
     QList<Note*> notes = NoteManager::getInstance().getActiveNotes();
     ui.noteList->clear();
@@ -94,6 +112,7 @@ void PluriNotes::updateActiveNotes(){
         ui.noteList->addItem((*ite)->getId());
     }
 }
+
 void PluriNotes::updateArchiveNotes(){
     QList<Note*> notes = NoteManager::getInstance().getArchiveNotes();
     ui.archiveList->clear();
@@ -110,15 +129,125 @@ void PluriNotes::updateSortedTasks(){ //veut-on aussi afficher la date et la pri
      }
 }
 
+void PluriNotes::CreationRelation(){
+    RelationEditeur* window = new RelationEditeur;
+    window->show();
+}
 
-void PluriNotes::ouvrirNote(QListWidgetItem* item) {
+void PluriNotes::ParcoursRelation(){
 
-    NoteManager& m = NoteManager::getInstance();
-    Note* n = m.getNote(item->text());
-    qDebug()<<"ouverture note"<<item->text();
-    AffichageNote* viewer = new AffichageNote();
-    viewer->afficheNote(n);
-    viewer->show();
+    window_exploration = new ExplorationRelations;
+    QObject::connect(window_exploration->getListe(), SIGNAL(doubleClicked(QModelIndex)), this, SLOT(OuvrirRelation()));
+
+   window_exploration->show();
+}
+
+void PluriNotes::OuvertureCouple(){
+    if(window_exploration->getListe()->currentRow() != -1){
+
+        RelationManager& rm = RelationManager::getInstance();
+
+        Relation* r = &rm.getRelation( window_relation->getTitre()->text() );
+
+        window_couple = new FenetreCouple(r, this);
+        //connect(window_couple->getButtonCreate(), SIGNAL(clicked(bool)), this, SLOT(ouvrir_arbo()));
+        window_couple->show();
+    }
+
+
+}
+
+void PluriNotes::VisualisationRelation(){
+
+
+    window_voir = new VoirRelations(this);
+    //connect(window_voir->getButtonDeletion(), SIGNAL(clicked(bool)), this, SLOT(ouvrir_arbo()));
+
+    window_voir->show();
+
+}
+
+void PluriNotes::OuvertureCouple(){
+    if(window_exploration->getListe()->currentRow() != -1){
+
+        RelationManager& rm = RelationManager::getInstance();
+
+        Relation* r = &rm.getRelation( window_relation->getTitre()->text() );
+
+        window_couple = new FenetreCouple(r, this);
+        //connect(window_couple->getButtonCreate(), SIGNAL(clicked(bool)), this, SLOT(ouvrir_arbo()));
+        window_couple->show();
+    }
+
+
+}
+
+void PluriNotes::ouvrir_arbo(){
+    if(arbo && arbo->getButtonAsc()->hasFocus() && arbo->getAscendants()->currentColumn() != -1 ){
+        NoteManager& m = NoteManager::getInstance();
+
+        Note* note = m.getNote( arbo->getAscendants()->currentItem()->text(0) );
+        arbo->close();
+        arbo = new Arborescence(*note, this);
+        connect(arbo->getButtonAsc(), SIGNAL(clicked(bool)), this, SLOT(ouvre_note_asc()));
+        connect(arbo->getButtonDesc(), SIGNAL(clicked(bool)), this, SLOT(ouvre_note_desc()));
+        arbo->show();
+
+    }
+    else if (arbo && arbo->getButtonDesc()->hasFocus() && arbo->getDescendants()->currentColumn() != -1 ){
+        NoteManager& m = NoteManager::getInstance();
+
+        Note* note = m.getNote( arbo->getDescendants()->currentItem()->text(0) );
+        arbo->close();
+        arbo = new Arborescence(*note, this);
+        connect(arbo->getButtonAsc(), SIGNAL(clicked(bool)), this, SLOT(ouvre_note_asc()));
+        connect(arbo->getButtonDesc(), SIGNAL(clicked(bool)), this, SLOT(ouvre_note_desc()));
+        arbo->show();
+
+
+    }
+    else{
+        if(arbo) arbo->close();
+
+	}
+}
+
+void PluriNotes::ouvre_note_asc() {
+    if(arbo->getAscendants()->currentColumn() != -1){
+
+        NoteManager& m = NoteManager::getInstance();
+
+        Note* note = m.getNote( arbo->getAscendants()->currentItem()->text(0) );
+
+        if(note->getType()=="article")
+            ArticleEditeur* edit = ArticleEditeur(note);
+        else if(note->getType()=="tache")
+            TacheEditeur* edit = TacheEditeur(note);
+        else
+            MediaEditeur* edit = MediaEditeur(note);
+       edit->show();
+       ouvrir_arbo();
+    }
+
+}
+
+void PluriNotes::ouvre_note_desc() {
+    if(arbo->getDescendants()->currentColumn() != -1){
+
+        NoteManager& m = NoteManager::getInstance();
+
+        Note* note = m.getNote( arbo->getDescendants()->currentItem()->text(0) );
+
+
+        if(note->getType()=="article")
+            ArticleEditeur* edit = ArticleEditeur(note);
+        else if(note->getType()=="tache")
+            TacheEditeur* edit = TacheEditeur(note);
+        else
+            MediaEditeur* edit = MediaEditeur(note);
+       edit->show();
+        ouvrir_arbo();
+    }
 
 }
 
@@ -343,128 +472,4 @@ void PluriNotes::load() {
     // Removes any device() or data from the reader * and resets its internal state to the initial state.
     xml.clear();
     qDebug()<<"fin load\n";
-}
-
-void PluriNotes::CreationRelation(){
-    RelationEditeur* window = new RelationEditeur;
-    window->show();
-}
-
-void PluriNotes::ParcoursRelation(){
-
-    window_exploration = new ExplorationRelations;
-    QObject::connect(window_exploration->getListe(), SIGNAL(doubleClicked(QModelIndex)), this, SLOT(OuvrirRelation()));
-
-   window_exploration->show();
-}
-
-void PluriNotes::OuvrirRelation(){
-    if(window_exploration->getListe()->currentRow() != -1){
-        QString titre_rela = window_exploration->getListe()->currentItem()->text();
-
-        RelationManager& rm = RelationManager::getInstance();
-
-        window_relation = new RelationEditeur(&rm.getRelation(titre_rela), this);
-
-        QObject::connect(window_relation->getButtonCreate(), SIGNAL(clicked(bool)), this, SLOT(OuvertureCouple()));
-
-        QObject::connect(window_relation->getButtonClose(), SIGNAL(clicked(bool)), this, SLOT(ParcoursRelation()));
-
-
-        window_relation->show();
-    }
-}
-
-void PluriNotes::OuvertureCouple(){
-    if(window_exploration->getListe()->currentRow() != -1){
-
-        RelationManager& rm = RelationManager::getInstance();
-
-        Relation* r = &rm.getRelation( window_relation->getTitre()->text() );
-
-        window_couple = new FenetreCouple(r, this);
-        //connect(window_couple->getButtonCreate(), SIGNAL(clicked(bool)), this, SLOT(ouvrir_arbo()));
-        window_couple->show();
-    }
-
-
-}
-
-void PluriNotes::VisualisationRelation(){
-
-
-    window_voir = new VoirRelations(this);
-    //connect(window_voir->getButtonDeletion(), SIGNAL(clicked(bool)), this, SLOT(ouvrir_arbo()));
-
-    window_voir->show();
-
-}
-
-void PluriNotes::ouvre_note_asc() {
-    if(arbo->getAscendants()->currentColumn() != -1){
-
-        NoteManager& m = NoteManager::getInstance();
-
-        Note* note = m.getNote( arbo->getAscendants()->currentItem()->text(0) );
-
-        if(note->getType()=="article")
-            ArticleEditeur* edit = ArticleEditeur(note);
-        else if(note->getType()=="tache")
-            TacheEditeur* edit = TacheEditeur(note);
-        else
-            MediaEditeur* edit = MediaEditeur(note);
-       edit->show();
-       ouvrir_arbo();
-    }
-
-}
-
-void PluriNotes::ouvre_note_desc() {
-    if(arbo->getDescendants()->currentColumn() != -1){
-
-        NoteManager& m = NoteManager::getInstance();
-
-        Note* note = m.getNote( arbo->getDescendants()->currentItem()->text(0) );
-
-
-        if(note->getType()=="article")
-            ArticleEditeur* edit = ArticleEditeur(note);
-        else if(note->getType()=="tache")
-            TacheEditeur* edit = TacheEditeur(note);
-        else
-            MediaEditeur* edit = MediaEditeur(note);
-       edit->show();
-        ouvrir_arbo();
-    }
-
-}
-
-void PluriNotes::ouvrir_arbo(){
-    if(arbo && arbo->getButtonAsc()->hasFocus() && arbo->getAscendants()->currentColumn() != -1 ){
-        NoteManager& m = NoteManager::getInstance();
-
-        Note* note = m.getNote( arbo->getAscendants()->currentItem()->text(0) );
-        arbo->close();
-        arbo = new Arborescence(*note, this);
-        connect(arbo->getButtonAsc(), SIGNAL(clicked(bool)), this, SLOT(ouvre_note_asc()));
-        connect(arbo->getButtonDesc(), SIGNAL(clicked(bool)), this, SLOT(ouvre_note_desc()));
-        arbo->show();
-
-    }
-    else if (arbo && arbo->getButtonDesc()->hasFocus() && arbo->getDescendants()->currentColumn() != -1 ){
-        NoteManager& m = NoteManager::getInstance();
-
-        Note* note = m.getNote( arbo->getDescendants()->currentItem()->text(0) );
-        arbo->close();
-        arbo = new Arborescence(*note, this);
-        connect(arbo->getButtonAsc(), SIGNAL(clicked(bool)), this, SLOT(ouvre_note_asc()));
-        connect(arbo->getButtonDesc(), SIGNAL(clicked(bool)), this, SLOT(ouvre_note_desc()));
-        arbo->show();
-
-
-    }
-    else{
-        if(arbo) arbo->close();
-
-}
 }
