@@ -38,14 +38,17 @@
 **
 ****************************************************************************/
 
-#include "player.h"
-
 #include <QMediaService>
 #include <QMediaPlaylist>
 #include <QVideoProbe>
 #include <QMediaMetaData>
 #include <QtWidgets>
 
+#include "player.h"
+
+/*------------------------------------------------------Méthodes publiques de la classe VideoPlayer-------------------------------------------------------*/
+
+/*------------------------------------------------------Constructeur et desctructeur------------------------------------------------------*/
 
 VideoPlayer::VideoPlayer(QWidget *parent)
     : QWidget(parent)
@@ -99,6 +102,8 @@ VideoPlayer::~VideoPlayer()
 {
 }
 
+/*------------------------------------------------------Accesseur en écriture-------------------------------------------------------*/
+
 void VideoPlayer::setUrl(const QUrl &url)
 {
     errorLabel->setText(QString());
@@ -106,6 +111,8 @@ void VideoPlayer::setUrl(const QUrl &url)
     mediaPlayer.setMedia(url);
     playButton->setEnabled(true);
 }
+
+/*------------------------------------------------------Méthodes public slots de la classe VideoPlayer-------------------------------------------------------*/
 
 void VideoPlayer::play()
 {
@@ -118,6 +125,8 @@ void VideoPlayer::play()
         break;
     }
 }
+
+/*------------------------------------------------------Méthodes private slots de la classe VideoPlayer------------------------------------------------------*/
 
 void VideoPlayer::mediaStateChanged(QMediaPlayer::State state)
 {

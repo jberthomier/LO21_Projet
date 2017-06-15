@@ -1,5 +1,9 @@
 #include "relationediteur.h"
 
+/*------------------------------------------------------Méthodes prubliques de la classe RelationEditeur-------------------------------------------------------*/
+
+/*------------------------------------------------------Constructeurs et destructeur-------------------------------------------------------*/
+
 RelationEditeur::RelationEditeur(QWidget* parent) : QWidget(parent)
 {
 
@@ -91,6 +95,8 @@ RelationEditeur::RelationEditeur(Relation* r,QWidget* parent) : QWidget(parent)
     this->setLayout(couche);
 }
 
+/*------------------------------------------------------Méthodes--------------------------------------------------------*/
+
 void RelationEditeur::create(){
     if(this->titre->text() != "" && this->description->toPlainText() !=""){
         RelationManager& rm = RelationManager::getInstance();
@@ -136,6 +142,8 @@ void RelationEditeur::save(){
      QMessageBox::information(this,"","Sauvergarde Réussie");
 }*/
 
+/*------------------------------------------------------Constructeur publique de la classe ExplorationRelations-------------------------------------------------------*/
+
 ExplorationRelations::ExplorationRelations(QWidget *parent) :QWidget(parent) {
 
     couche = new QVBoxLayout;
@@ -164,6 +172,8 @@ ExplorationRelations::ExplorationRelations(QWidget *parent) :QWidget(parent) {
 
     this->setLayout(couche);
 }
+
+/*------------------------------------------------------Constructeur publique de la classe FenetreCouple-------------------------------------------------------*/
 
 FenetreCouple::FenetreCouple(Relation* r,QWidget *parent) : QWidget(parent) {
     couche = new QVBoxLayout;
@@ -208,6 +218,8 @@ FenetreCouple::FenetreCouple(Relation* r,QWidget *parent) : QWidget(parent) {
 
 }
 
+/*------------------------------------------------------Méthode public slots de la classe ExplorationRelations-------------------------------------------------------*/
+
 void FenetreCouple::save() {
     if(this->liste_x->currentRow() !=-1 && this->liste_y->currentRow()!=-1){
         RelationManager& rm = RelationManager::getInstance();
@@ -225,6 +237,8 @@ void FenetreCouple::save() {
         }
     }
 }
+
+/*------------------------------------------------------Constructeur publique de la classe VoirRelations-------------------------------------------------------*/
 
 VoirRelations::VoirRelations(QWidget *parent) : QWidget(parent) {
 
@@ -276,31 +290,7 @@ VoirRelations::VoirRelations(QWidget *parent) : QWidget(parent) {
 
 }
 
-void VoirRelations::activeDelete(){
-    if (rel->currentText()=="Reference")
-        button_deletion->setEnabled(false);
-    else
-        button_deletion->setEnabled(true);
-}
-
-void VoirRelations::afficherCouples(){
-    RelationManager& rm = RelationManager::getInstance();
-
-    liste_couples->clear();
-
-    Relation& r = rm.getRelation(rel->currentText());
-    NoteManager& m = NoteManager::getInstance();
-
-    for( auto it = r.getIterator() ; !it.isdone() ; it++){
-        QString n1 = (*it)->getNoteSource().getTitre();
-        QString n2 = (*it)->getNoteDestination().getTitre();
-        if(m.getNote(n1)->active==true && m.getNote(n2)->active==true ){
-            liste_couples->addItem(n1+ "->"+n2);
-        }
-    }
-
-
-}
+/*------------------------------------------------------Méthode publique de la classe VoirRelations-------------------------------------------------------*/
 
 void VoirRelations::afficherCouplesR(QString relation) {
     RelationManager& rm= RelationManager::getInstance();
@@ -320,6 +310,25 @@ void VoirRelations::afficherCouplesR(QString relation) {
         QString n1 = (*it)->getNoteSource().getTitre();
         QString n2 = (*it)->getNoteDestination().getTitre();
         if(m.getNote(n1)->active==true && m.getNote(n2)->active==true ) {
+            liste_couples->addItem(n1+ "->"+n2);
+        }
+    }
+}
+
+/*------------------------------------------------------Méthode public slots de la classe VoirRelations-------------------------------------------------------*/
+
+void VoirRelations::afficherCouples(){
+    RelationManager& rm = RelationManager::getInstance();
+
+    liste_couples->clear();
+
+    Relation& r = rm.getRelation(rel->currentText());
+    NoteManager& m = NoteManager::getInstance();
+
+    for( auto it = r.getIterator() ; !it.isdone() ; it++){
+        QString n1 = (*it)->getNoteSource().getTitre();
+        QString n2 = (*it)->getNoteDestination().getTitre();
+        if(m.getNote(n1)->active==true && m.getNote(n2)->active==true ){
             liste_couples->addItem(n1+ "->"+n2);
         }
     }
@@ -390,5 +399,11 @@ void VoirRelations::SupprimerCouple(){
     }
     else
         QMessageBox::information(this,"","Sélectionnez un couple");
+}
 
+void VoirRelations::activeDelete(){
+    if (rel->currentText()=="Reference")
+        button_deletion->setEnabled(false);
+    else
+        button_deletion->setEnabled(true);
 }

@@ -1,8 +1,6 @@
 #ifndef ARBORESCENCE_H
 #define ARBORESCENCE_H
 
-#include"Note.h"
-
 #include<QWidget>
 #include<QTreeWidget>
 #include<QTreeView>
@@ -11,6 +9,7 @@
 #include<QList>
 #include<QPushButton>
 
+#include"Note.h"
 
 class Arborescence : public QWidget{
 
@@ -18,20 +17,20 @@ class Arborescence : public QWidget{
 
 public:
 
+	//Constructeur
     Arborescence(Note& note, QWidget *parent = 0);
 
-
+	
+	//Accesseurs en lecture
     QTreeWidget* getDescendants() {return descendants; }
-
     QTreeWidget* getAscendants() {return ascendants; }
 
-
     QPushButton* getButtonAsc() {return button_asc; }
-
     QPushButton* getButtonDesc() {return button_desc; }
 
 private:
 
+	//Attributd
     QVBoxLayout *couche;
 
     QHBoxLayout *label_hbox;
@@ -51,19 +50,15 @@ private:
     QList<QString> id_asc_root;
     QList<QString> id_dsc_root;
 
+	//Accesseurs en écriture
     void setAscendantsRacine(Note& note);
-
     void setAscendants(QString id, QTreeWidgetItem* tree);
-
     void setDescendantsRacine(Note& note);
-
     void setDescendants(QString id, QTreeWidgetItem* tree);
 
-
+	//Méthodes
     QTreeWidgetItem* addRoot(QTreeWidget * parent, QString nom);
-
     QTreeWidgetItem* addChild(QTreeWidgetItem * parent, QString nom);
-
 
 public slots:
 

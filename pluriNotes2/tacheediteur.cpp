@@ -1,5 +1,21 @@
 #include "tacheediteur.h"
 
+/*------------------------------------------------------Méthode privée de la classe TacheEditeur-------------------------------------------------------*/
+
+void TacheEditeur::sauvegarde() {
+    //Appel du getNote() de NoteEditeur
+    if(dynamic_cast<Tache*>(getNote()))
+        qDebug()<<"tache";
+    dynamic_cast<Tache*>(getNote())->setAction(action->toPlainText());
+    dynamic_cast<Tache*>(getNote())->setPriorite(priorite->value());
+    //dynamic_cast<Tache*>(getNote())->setDdm(echance->toPlainText());
+
+}
+
+/*------------------------------------------------------Méthodes publiques de la classe TacheEditeur-------------------------------------------------------*/
+
+/*------------------------------------------------------Constructeur et destructeur-------------------------------------------------------*/
+
 TacheEditeur::TacheEditeur(Tache* t, QWidget* parent) : NoteEditeur(t,parent)
 {
     act1 = new QLabel("Action");
@@ -51,8 +67,6 @@ TacheEditeur::TacheEditeur(Tache* t, QWidget* parent) : NoteEditeur(t,parent)
     priorite->setValue(t->getPriorite());
     echeance->setDate(t->getEcheance());
 
-
-
     QObject::connect(action,SIGNAL(textChanged()),this,SLOT(activeSave()));
     QObject::connect(priorite,SIGNAL(valueChanged(int)),this,SLOT(activeSave()));
     QObject::connect(echeance,SIGNAL(dateChanged(QDate)),this,SLOT(activeSave()));
@@ -61,15 +75,5 @@ TacheEditeur::TacheEditeur(Tache* t, QWidget* parent) : NoteEditeur(t,parent)
 }
 
 TacheEditeur::~TacheEditeur() {
-
-}
-
-void TacheEditeur::sauvegarde() {
-    //Appel du getNote() de NoteEditeur
-    if(dynamic_cast<Tache*>(getNote()))
-        qDebug()<<"tache";
-    dynamic_cast<Tache*>(getNote())->setAction(action->toPlainText());
-    dynamic_cast<Tache*>(getNote())->setPriorite(priorite->value());
-    //dynamic_cast<Tache*>(getNote())->setDdm(echance->toPlainText());
 
 }

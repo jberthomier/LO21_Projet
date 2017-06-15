@@ -54,17 +54,27 @@
 class VideoPlayer : public QWidget
 {
     Q_OBJECT
+	
 public:
+
+	//Constructeur et destructeur
     VideoPlayer(QWidget *parent = 0);
     ~VideoPlayer();
 
+	//Accesseur en lecture
+	QString getFile() const;
+	
+	//Accesseur en écriture
     void setUrl(const QUrl &url);
-    QString getFile() const;
 
 public slots:
+
+	//Méthode
     void play();
 
 private slots:
+
+	//Méthodes
     void mediaStateChanged(QMediaPlayer::State state);
     void positionChanged(qint64 position);
     void durationChanged(qint64 duration);
@@ -72,9 +82,13 @@ private slots:
     void handleError();
 
 signals:
+
+	//Méthode
     void fileChanged();
 
 private:
+
+	//Attributs
     QMediaPlayer mediaPlayer;
     QAbstractButton *playButton;
     QSlider *positionSlider;

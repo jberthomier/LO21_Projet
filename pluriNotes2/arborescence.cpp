@@ -3,6 +3,8 @@
 #include "relation.h"
 #include "notemanager.h"
 
+/*------------------------------------------------------Méthodes publiques de la classe Arborescence-------------------------------------------------------*/
+
 Arborescence::Arborescence(Note& note, QWidget *parent): QWidget(parent)
 {
 
@@ -39,6 +41,9 @@ Arborescence::Arborescence(Note& note, QWidget *parent): QWidget(parent)
     this->setLayout(couche);
 }
 
+/*------------------------------------------------------Méthodes privées de la classe Arborescence-------------------------------------------------------*/
+
+/*------------------------------------------------------Accesseurs en écriture-------------------------------------------------------*/
 
 void Arborescence::setAscendantsRacine(Note& note){
     NoteManager& m = NoteManager::getInstance();
@@ -64,10 +69,7 @@ void Arborescence::setAscendantsRacine(Note& note){
                 }
             }
         }
-
-
     }
-
 }
 
 void Arborescence::setAscendants(QString id, QTreeWidgetItem* tree){
@@ -94,10 +96,7 @@ void Arborescence::setAscendants(QString id, QTreeWidgetItem* tree){
                 }
             }
         }
-
-
     }
-
 }
 
 void Arborescence::setDescendantsRacine(Note& note){
@@ -124,10 +123,7 @@ void Arborescence::setDescendantsRacine(Note& note){
                 }
             }
         }
-
-
     }
-
 }
 
 void Arborescence::setDescendants(QString id, QTreeWidgetItem* tree){
@@ -154,12 +150,10 @@ void Arborescence::setDescendants(QString id, QTreeWidgetItem* tree){
                 }
             }
         }
-
-
     }
-
 }
 
+/*------------------------------------------------------Méthodes-------------------------------------------------------*/
 
 QTreeWidgetItem* Arborescence::addRoot(QTreeWidget *parent, QString nom){
     QTreeWidgetItem* itm = new QTreeWidgetItem(parent);
@@ -175,5 +169,4 @@ QTreeWidgetItem* Arborescence::addChild(QTreeWidgetItem *parent, QString nom){
 
     parent->addChild(itm);
     return itm;
-
 }

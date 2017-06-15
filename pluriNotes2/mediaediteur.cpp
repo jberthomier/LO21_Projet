@@ -1,5 +1,7 @@
 #include "mediaediteur.h"
 
+/*------------------------------------------------------Construteur et destructeur publique de la classe MediaEditeur-------------------------------------------------------*/
+
 MediaEditeur::MediaEditeur(Media *m, QWidget *parent) : NoteEditeur(m,parent)
 {
     desc = new QLabel("Description");
@@ -42,15 +44,13 @@ MediaEditeur::MediaEditeur(Media *m, QWidget *parent) : NoteEditeur(m,parent)
     QObject::connect(chemin, SIGNAL(textChanged(QString)), this, SLOT(activeSave()));
     QObject::connect(save,SIGNAL(clicked()),this,SLOT(saveMedia()));
 
-
-
 }
-
 
 MediaEditeur::~MediaEditeur() {
 
 }
 
+/*------------------------------------------------------Méthodes public slots de la classe MediaEditeur-------------------------------------------------------*/
 
 void MediaEditeur::openFile(QString f){
 

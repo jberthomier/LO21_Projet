@@ -14,14 +14,17 @@
 #include <QDateEdit>
 #include <QSpinBox>
 #include <QComboBox>
+
 #include "Note.h"
 #include "noteediteur.h"
 
 class TacheEditeur : public NoteEditeur
 {
 private:
+
     Q_OBJECT
 
+	//Attributs
     QLabel* act1;
     QLabel* prior;
     QLabel* dateE;
@@ -30,14 +33,19 @@ private:
     QSpinBox* priorite;
     QDateEdit* echeance;
     QComboBox* etat;
+	
+	//Méthode
     void sauvegarde();
 
 public:
+
+	//Constructeur et destructeur
     TacheEditeur(Tache* t, QWidget *parent = 0);
     ~TacheEditeur();
 
 public slots:
 
+	//Méthodes
     void saveTache(){
         Tache* t = dynamic_cast<Tache*>(note);
         t->setAction(action->toPlainText());

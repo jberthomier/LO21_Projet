@@ -18,10 +18,13 @@
 class MediaEditeur : public NoteEditeur
 {
 private :
+
     Q_OBJECT
 
+	//Classe amie
     friend class AffichageNote;
 
+	//Attributs
     QLabel* desc;
     QLabel* filepath;
 
@@ -30,16 +33,18 @@ private :
 
     VideoPlayer* player;
 
-
+	//Méthode
     void sauvegarde();
 
-
 public:
+
+	//Constructeur et destructeur
     MediaEditeur(Media* m, QWidget *parent=0);
     ~MediaEditeur();
 
 public slots:
 
+	//Méthodes
     void saveMedia(){
         dynamic_cast<Media*>(getNote())->setDescription(description->toPlainText());
         dynamic_cast<Media*>(getNote())->setFilename(chemin->text());
