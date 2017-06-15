@@ -16,6 +16,10 @@ PluriNotes::PluriNotes(QWidget *parent) : QMainWindow(parent)
     QObject::connect(ui.Update, SIGNAL(clicked(bool)), this, SLOT(updateActiveNotes()));
     QObject::connect(ui.Update, SIGNAL(clicked(bool)), this, SLOT(updateArchiveNotes()));
     QObject::connect(ui.Update, SIGNAL(clicked(bool)), this, SLOT(updateSortedTasks()));
+    
+    QObject::connect(ui.noteList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(ouvrirNote(QListWidgetItem*)));
+    QObject::connect(ui.archiveList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(ouvrirNote(QListWidgetItem*)));
+    QObject::connect(ui.taskList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(ouvrirNote(QListWidgetItem*)));
 
     QObject::connect(ui.actionNouvelleRelation, SIGNAL(triggered()), this, SLOT(CreationRelation()));
     QObject::connect(ui.actionParcoursRelation, SIGNAL(triggered()), this, SLOT(ParcoursRelation()));
@@ -111,16 +115,15 @@ void PluriNotes::updateSortedTasks(){ //veut-on aussi afficher la date et la pri
 }
 
 
-void PluriNotes::ouvrirNote(QListWidgetItem* item) {
-
+void PluriNotes::ouvrirNote(QListWidgetItem* id) {
     NoteManager& m = NoteManager::getInstance();
-    Note* n = m.getNote(item->text());
-    qDebug()<<"ouverture note"<<item->text();
+    Note* n=m.getNote(id->text());
+    qDebug()<<"Ouverture note"<<id->text();
     AffichageNote* viewer = new AffichageNote();
     viewer->afficheNote(n);
     viewer->show();
-
 }
+
 
 void PluriNotes::load() {
     qDebug()<<"HEY";
