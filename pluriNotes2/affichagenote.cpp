@@ -1,21 +1,11 @@
 #include "affichagenote.h"
 
-AffichageNote::AffichageNote(QWidget *parent) :
-    QWidget(parent)
-{
-    layout= new QHBoxLayout(this);
-    tabWidget = new QTabWidget(this);
-    tabWidget->setTabsClosable(true);
-    tabWidget->setMovable(true);
-    layout->addWidget(tabWidget);
-    QObject::connect(tabWidget, &QTabWidget::tabCloseRequested,this,&AffichageNote::fermeTab);
+/*------------------------------------------------------Méthodes privées de AffichageNote-------------------------------------------------------*/
 
-}
-
-AffichageNote::~AffichageNote()
-{
-    for(int i=tabWidget->count();i>0; i--)
-        fermeTab(i);
+void AffichageNote::fermeTab(int i) {
+    tabWidget->setCurrentIndex(i);
+    QWidget* old = tabWidget->widget(i);
+    delete old;
 }
 
 NoteEditeur* AffichageNote::createEditeur(Note* n) {
@@ -77,7 +67,29 @@ ArticleEditeur* AffichageNote::createArticleEditeur(Note* n) {
     return edit;
 }
 
+/*------------------------------------------------------Méthodes publiques de AffichageNote-------------------------------------------------------*/
 
+/*------------------------------------------------------Constructeur et destructeur-------------------------------------------------------*/
+
+AffichageNote::AffichageNote(QWidget *parent) :
+    QWidget(parent)
+{
+    layout= new QHBoxLayout(this);
+    tabWidget = new QTabWidget(this);
+    tabWidget->setTabsClosable(true);
+    tabWidget->setMovable(true);
+    layout->addWidget(tabWidget);
+    QObject::connect(tabWidget, &QTabWidget::tabCloseRequested,this,&AffichageNote::fermeTab);
+
+}
+
+AffichageNote::~AffichageNote()
+{
+    for(int i=tabWidget->count();i>0; i--)
+        fermeTab(i);
+}
+
+/*------------------------------------------------------Méthodes-------------------------------------------------------*/
 
 void AffichageNote::afficheNote(Note* note) {
     for (int i = 0;i<tabWidget->count(); i++){
@@ -177,25 +189,10 @@ void AffichageNote::afficheMedia(Media* media) {
 
 }
 
-
 void AffichageNote::fermeNote(const QString &id){
     for (int i=0; i<tabWidget->count(); i++)
         if(tabWidget->tabText(i)==id || tabWidget->tabText(i)=="*"+id)
             fermeTab(i);
-}
-
-
-void AffichageNote::fermeTab(int i) {
-    tabWidget->setCurrentIndex(i);
-    QWidget* old = tabWidget->widget(i);
-    delete old;
-}
-
-bool AffichageNote::ouverte(const QString &id) {
-    for (int i=0; i<tabWidget->count(); i++)
-        if(tabWidget->tabText(i)==id ||tabWidget->tabText(i)=="*"+id )
-            return true;
-   return false;
 }
 
 void AffichageNote::refreshNote(const QString &id) {
@@ -209,6 +206,15 @@ void AffichageNote::refreshNote(const QString &id) {
         }
     }
 }
+
+bool AffichageNote::ouverte(const QString &id) {
+    for (int i=0; i<tabWidget->count(); i++)
+        if(tabWidget->tabText(i)==id ||tabWidget->tabText(i)=="*"+id )
+            return true;
+   return false;
+}
+
+/*------------------------------------------------------Méthodes public slots-------------------------------------------------------*/
 
 void AffichageNote::unsavedChanges(NoteEditeur *e) {
     tabWidget->setTabText(tabWidget->indexOf(e),"*"+e->getId());
